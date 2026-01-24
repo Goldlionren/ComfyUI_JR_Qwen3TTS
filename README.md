@@ -1,6 +1,3 @@
-## README.md（完整版）
-
-````markdown
 # ComfyUI_JR_Qwen3TTS
 
 A ComfyUI custom node implementation for **Qwen3-TTS**, supporting **Voice Design**, **Voice Clone**, and **Custom Voice** generation modes.
@@ -70,7 +67,7 @@ Supported speakers:
 ```bash
 cd ComfyUI/custom_nodes
 git clone https://github.com/<your-username>/ComfyUI_JR_Qwen3TTS.git
-````
+```
 
 Restart ComfyUI after installation.
 

@@ -93,12 +93,21 @@ def _try_warmup(model):
 
 def _np_to_audio(np_wav: np.ndarray, sr: int) -> Dict[str, Any]:
     wav = np.asarray(np_wav, dtype=np.float32)
+    # Accept common shapes and normalize to ComfyUI AUDIO: [B, C, N]
     if wav.ndim == 1:
-        wav = wav[None, :]
+        # [N] -> [1, 1, N]
+        wav = wav[None, None, :]
     elif wav.ndim == 2:
-        # (N, C) -> (C, N)
+        # [C, N] or [N, C] -> [1, C, N]
         if wav.shape[0] > wav.shape[1]:
+            # likely [N, C]
             wav = wav.T
+        wav = wav[None, :, :]
+    elif wav.ndim == 3:
+        # already batched; try to ensure [B, C, N]
+        # if looks like [B, N, C], transpose last two dims
+        if wav.shape[1] > wav.shape[2] and wav.shape[2] <= 8:
+            wav = np.transpose(wav, (0, 2, 1))
     else:
         raise ValueError(f"Unsupported wav shape: {wav.shape}")
     return {"waveform": torch.from_numpy(wav), "sample_rate": int(sr)}
@@ -114,35 +123,27 @@ def _audio_to_np(audio: Dict[str, Any]) -> Tuple[np.ndarray, int]:
         wf = wf.detach().cpu().float().numpy()
 
     wf = np.asarray(wf, dtype=np.float32)
-    # ComfyUI AUDIO waveform shapes seen in the wild:
-    # 1) (N,)
-    # 2) (C, N)
-    # 3) (B, C, N)  (common)
-    # 4) (B, N, C)  (less common)
-    if wf.ndim == 1:
-        pass
+    # Normalize common ComfyUI AUDIO shapes to mono (N,)
+    # Expected official shape: [B, C, N]
+    if wf.ndim == 3:
+        # [B, C, N] or [B, N, C]
+        if wf.shape[1] > wf.shape[2] and wf.shape[2] <= 8:
+            # [B, N, C] -> [B, C, N]
+            wf = np.transpose(wf, (0, 2, 1))
+        wf0 = wf[0]  # first batch: [C, N]
+        wav = wf0.mean(axis=0) if wf0.shape[0] > 1 else wf0[0]
     elif wf.ndim == 2:
-        # (C, N) -> mono
-        wf = wf.mean(axis=0)
-    elif wf.ndim == 3:
-        # Pick first batch by default
-        # Try to detect which axis is channel
-        # Heuristic: the channel axis is usually small (<=8)
-        b0 = wf[0]
-        # b0 could be (C, N) or (N, C)
-        if b0.shape[0] <= 8 and b0.shape[1] > b0.shape[0]:
-            # (C, N)
-            wf = b0.mean(axis=0)
-        elif b0.shape[1] <= 8 and b0.shape[0] > b0.shape[1]:
-            # (N, C)
-            wf = b0.mean(axis=1)
+        # [C, N] or [N, C]
+        if wf.shape[0] <= 8 and wf.shape[1] > wf.shape[0]:
+            wav = wf.mean(axis=0) if wf.shape[0] > 1 else wf[0]
         else:
-            # Fallback: flatten then treat as mono
-            wf = b0.reshape(-1)
+            wav = wf.mean(axis=1) if wf.shape[1] > 1 else wf[:, 0]
+    elif wf.ndim == 1:
+        wav = wf
     else:
-        raise ValueError(f"Unsupported waveform ndim: {wf.ndim}, shape={wf.shape}")
+        raise ValueError(f"Unsupported waveform ndim: {wf.ndim}")
 
-    return wf, sr
+    return wav.astype(np.float32), sr
 
 
 class JR_Qwen3TTS_Loader:

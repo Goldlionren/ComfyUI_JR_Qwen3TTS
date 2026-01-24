@@ -1,0 +1,219 @@
+{
+  "id": "fb628fd0-e15f-4797-b919-a222093fd839",
+  "revision": 0,
+  "last_node_id": 9,
+  "last_link_id": 6,
+  "nodes": [
+    {
+      "id": 6,
+      "type": "LoadAudio",
+      "pos": [
+        -1077.1187447368832,
+        2421.42278426668
+      ],
+      "size": [
+        327.85773163959584,
+        136
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "LoadAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "GXM00.wav",
+        null,
+        null
+      ]
+    },
+    {
+      "id": 2,
+      "type": "JR_Qwen3TTS_Loader",
+      "pos": [
+        -1078.1008001235407,
+        2199.028484062296
+      ],
+      "size": [
+        329.68841764271144,
+        178
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "JR_Qwen3TTS_Loader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+        "",
+        "cuda:0",
+        "bf16",
+        "flash_attention_2",
+        true
+      ]
+    },
+    {
+      "id": 3,
+      "type": "JR_Qwen3TTS_Generate",
+      "pos": [
+        -714.7749388117185,
+        2203.852650153344
+      ],
+      "size": [
+        400,
+        456
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "link": 1
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "JR_Qwen3TTS_Generate",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "custom_voice",
+        "雨哥哥,你今天晚上想吃点什么?",
+        "Auto",
+        true,
+        0.9,
+        0.8,
+        1.05,
+        1024,
+        "",
+        false,
+        "28岁女人,甜美,性感的声音",
+        "Vivian",
+        ""
+      ]
+    },
+    {
+      "id": 5,
+      "type": "JR_Qwen3TTS_SaveWav",
+      "pos": [
+        -285.0768498407083,
+        2203.969686266371
+      ],
+      "size": [
+        270.456640625,
+        82
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "JR_Qwen3TTS_SaveWav",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output",
+        "JR_qwen3_tts"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      3,
+      0,
+      "QWEN3_TTS_MODEL"
+    ],
+    [
+      3,
+      3,
+      0,
+      5,
+      0,
+      "AUDIO"
+    ],
+    [
+      4,
+      6,
+      0,
+      3,
+      1,
+      "AUDIO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ue_links": [],
+    "links_added_by_ue": [],
+    "ds": {
+      "scale": 1.7088742511245865,
+      "offset": [
+        1272.567470986157,
+        -2007.7787191195218
+      ]
+    },
+    "frontendVersion": "1.38.10",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

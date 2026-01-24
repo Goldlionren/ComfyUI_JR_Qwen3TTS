@@ -1,0 +1,39 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# ===== Virtual env / local python =====
+venv/
+.env/
+.python-version
+
+# ===== ComfyUI runtime =====
+outputs/
+input/
+temp/
+user/
+logs/
+
+# ===== HuggingFace / model cache =====
+.cache/
+models/
+checkpoints/
+*.safetensors
+*.bin
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== Editor =====
+.vscode/
+.idea/
+*.swp
+
+# ===== Audio outputs =====
+*.wav
+*.mp3
+*.flac

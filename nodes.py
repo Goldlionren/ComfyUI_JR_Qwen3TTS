@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import time
-from typing import Any, Dict, Tuple, Optional
+from typing import Any, Dict, Tuple, Optional, List
 
 import numpy as np
 import soundfile as sf
@@ -10,6 +10,8 @@ import torch
 
 from .qwen_wrapper import load_qwen3_tts, clear_cache
 import folder_paths
+
+QWEN3_TTS_VOICE_PROMPT = "QWEN3_TTS_VOICE_PROMPT"
 
 QWEN3_TTS_MODEL_PRESETS = [
     # Generation models (from HF collection)
@@ -119,6 +121,94 @@ def _try_warmup(model):
         # Keep it short; warmup is optional
         print(f"[JR_Qwen3TTS] warmup skipped: {type(e).__name__}: {e}")
 
+def _default_voice_preset_dir() -> str:
+    """
+    Default directory for storing voice preset files.
+    """
+    try:
+        root = os.path.join(folder_paths.models_dir, "qwen3_tts", "voice_presets")
+    except Exception:
+        root = os.path.join("models", "qwen3_tts", "voice_presets")
+    os.makedirs(root, exist_ok=True)
+    return root
+
+
+def _list_voice_presets() -> List[str]:
+    """
+    Return preset filenames (without extension) under the default preset dir.
+    """
+    d = _default_voice_preset_dir()
+    out: List[str] = []
+    for fn in os.listdir(d):
+        if fn.lower().endswith((".pt", ".pth")):
+            out.append(os.path.splitext(fn)[0])
+    out.sort()
+    # Dropdown must not be empty, provide a placeholder
+    return out if out else ["(none)"]
+
+
+def _resolve_preset_path(preset_name: str, output_dir: str = "") -> str:
+    """
+    Resolve a preset name to a full path.
+    - If preset_name looks like a path, keep it.
+    - Otherwise map to <output_dir or default_dir>/<preset_name>.pt
+    """
+    name = (preset_name or "").strip()
+    if not name:
+        raise ValueError("preset_name is empty")
+
+    # If user typed a path
+    if os.path.isabs(name) or os.path.exists(name):
+        return name
+
+    out_dir = (output_dir or "").strip() or _default_voice_preset_dir()
+    os.makedirs(out_dir, exist_ok=True)
+    if not name.lower().endswith((".pt", ".pth")):
+        name = name + ".pt"
+    return os.path.join(out_dir, name)
+
+
+def _voice_prompt_to_safe_payload(prompt_items: Any) -> Dict[str, Any]:
+    """
+    Convert List[VoiceClonePromptItem] to a safe payload (dict/list + tensors),
+    compatible with torch.load(weights_only=True) defaults in PyTorch 2.6+.
+    """
+    safe_items: List[Dict[str, Any]] = []
+    for it in (prompt_items or []):
+        safe_items.append({
+            "ref_code": getattr(it, "ref_code", None),
+            "ref_spk_embedding": getattr(it, "ref_spk_embedding"),
+            "x_vector_only_mode": bool(getattr(it, "x_vector_only_mode", True)),
+            "icl_mode": bool(getattr(it, "icl_mode", False)),
+            "ref_text": getattr(it, "ref_text", None),
+        })
+    return {"format": "qwen3tts_voice_prompt_v1", "items": safe_items}
+
+
+def _safe_payload_to_voice_prompt(payload: Dict[str, Any]) -> Any:
+    """
+    Reconstruct List[VoiceClonePromptItem] from safe payload.
+    """
+    if not isinstance(payload, dict) or payload.get("format") != "qwen3tts_voice_prompt_v1":
+        raise ValueError(
+            "Unsupported voice preset file format. "
+            "Please re-save the preset using the updated Voice Preset node."
+        )
+    items = payload.get("items", [])
+    from .qwen_tts.inference.qwen3_tts_model import VoiceClonePromptItem
+
+    prompt_items = []
+    for d in items:
+        prompt_items.append(
+            VoiceClonePromptItem(
+                ref_code=d.get("ref_code", None),
+                ref_spk_embedding=d["ref_spk_embedding"],
+                x_vector_only_mode=bool(d.get("x_vector_only_mode", True)),
+                icl_mode=bool(d.get("icl_mode", False)),
+                ref_text=d.get("ref_text", None),
+            )
+        )
+    return prompt_items
 
 def _np_to_audio(np_wav: np.ndarray, sr: int) -> Dict[str, Any]:
     wav = np.asarray(np_wav, dtype=np.float32)
@@ -175,6 +265,120 @@ def _audio_to_np(audio: Dict[str, Any]) -> Tuple[np.ndarray, int]:
     return wav.astype(np.float32), sr
 
 
+def _default_voice_prompt_dir() -> str:
+    """Default directory for storing pre-extracted voice prompt data."""
+    try:
+        root = os.path.join(folder_paths.models_dir, "qwen3_tts", "voice_prompts")
+    except Exception:
+        root = os.path.join("models", "qwen3_tts", "voice_prompts")
+    os.makedirs(root, exist_ok=True)
+    return root
+
+
+def _resolve_voice_prompt_path(p: str) -> str:
+    """Resolve a user-provided path. If relative, place it under the default voice prompt dir."""
+    s = (p or "").strip()
+    if not s:
+        raise ValueError("voice_prompt_path is empty")
+    # If already absolute or exists relative to cwd, keep as-is
+    if os.path.isabs(s) or os.path.exists(s):
+        return s
+    return os.path.join(_default_voice_prompt_dir(), s)
+
+
+def _voice_prompt_to_safe_payload(prompt_items: Any) -> Dict[str, Any]:
+    """
+    Convert List[VoiceClonePromptItem] to a safe, weights_only-loadable payload.
+    Only uses primitive types + Tensors.
+    """
+    safe_items: List[Dict[str, Any]] = []
+    for it in (prompt_items or []):
+        safe_items.append({
+            "ref_code": getattr(it, "ref_code", None),
+            "ref_spk_embedding": getattr(it, "ref_spk_embedding"),
+            "x_vector_only_mode": bool(getattr(it, "x_vector_only_mode", True)),
+            "icl_mode": bool(getattr(it, "icl_mode", False)),
+            "ref_text": getattr(it, "ref_text", None),
+        })
+    return {"format": "qwen3tts_voice_prompt_v1", "items": safe_items}
+
+
+class JR_Qwen3TTS_VoicePreset:
+    """
+    Unified Voice Preset node:
+    - Load: pick a preset from dropdown and output ref_voice_data.
+    - Save/Update: provide ref_audio (+ optional ref_text) and it will extract prompt and overwrite preset file.
+
+    This removes the need for separate Extract+Save and Load nodes, and behaves like a model preset dropdown.
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "action": (["load", "save_or_update"], {"default": "load"}),
+                # Dropdown list from disk
+                "preset": (_list_voice_presets(),),
+                # For creating new presets via typing a name
+                "preset_name_override": ("STRING", {"default": ""}),
+                "output_dir": ("STRING", {"default": ""}),
+                # These govern extraction when saving
+                "x_vector_only_mode": ("BOOLEAN", {"default": True}),
+            },
+            "optional": {
+                "model": ("QWEN3_TTS_MODEL",),
+                "ref_audio": ("AUDIO",),
+                "ref_text": ("STRING", {"multiline": True, "default": ""}),
+            }
+        }
+
+    RETURN_TYPES = (QWEN3_TTS_VOICE_PROMPT, "STRING")
+    RETURN_NAMES = ("ref_voice_data", "path")
+    FUNCTION = "run"
+    CATEGORY = "JR/Audio/TTS"
+
+    def run(
+        self,
+        action: str,
+        preset: str,
+        preset_name_override: str,
+        output_dir: str,
+        x_vector_only_mode: bool,
+        model=None,
+        ref_audio: Optional[Dict[str, Any]] = None,
+        ref_text: str = "",
+    ):
+        name = (preset_name_override or "").strip() or (preset or "").strip()
+        if not name or name == "(none)":
+            raise ValueError("No preset selected. Choose an existing preset, or type a new name in preset_name_override.")
+
+        path = _resolve_preset_path(name, output_dir=output_dir)
+
+        if action == "save_or_update":
+            if model is None:
+                raise ValueError("action=save_or_update requires input 'model'.")
+            if ref_audio is None:
+                raise ValueError("action=save_or_update requires input 'ref_audio' (AUDIO).")
+
+            wav_np, wav_sr = _audio_to_np(ref_audio)
+            prompt_items = model.create_voice_clone_prompt(
+                ref_audio=(wav_np, wav_sr),
+                ref_text=(ref_text if ref_text else None),
+                x_vector_only_mode=bool(x_vector_only_mode),
+            )
+
+            payload = _voice_prompt_to_safe_payload(prompt_items)
+            torch.save(payload, path)
+            return (prompt_items, path)
+
+        # load
+        if not os.path.isfile(path):
+            raise FileNotFoundError(f"Voice preset not found: {path}")
+        payload = torch.load(path, map_location="cpu")
+        prompt_items = _safe_payload_to_voice_prompt(payload)
+        return (prompt_items, path)
+
+
 class JR_Qwen3TTS_Loader:
     @classmethod
     def INPUT_TYPES(cls):
@@ -229,6 +433,7 @@ class JR_Qwen3TTS_Generate:
                 "max_new_tokens": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 64}),
             },
             "optional": {
+                "ref_voice_data": (QWEN3_TTS_VOICE_PROMPT,),
                 # voice_clone
                 "ref_audio": ("AUDIO",),
                 "ref_text": ("STRING", {"multiline": True, "default": ""}),
@@ -261,6 +466,7 @@ class JR_Qwen3TTS_Generate:
         repetition_penalty: float,
         max_new_tokens: int,
         ref_audio: Optional[Dict[str, Any]] = None,
+        ref_voice_data: Optional[Any] = None,
         ref_text: str = "",
         x_vector_only_mode: bool = False,
         instruct: str = "",
@@ -278,17 +484,27 @@ class JR_Qwen3TTS_Generate:
         lang = language if language else "Auto"
 
         if mode == "voice_clone":
-            if ref_audio is None:
-                raise ValueError("mode=voice_clone requires optional input 'ref_audio' (AUDIO).")
-            wav_np, wav_sr = _audio_to_np(ref_audio)
-            wavs, sr = model.generate_voice_clone(
-                text=text,
-                language=lang,
-                ref_audio=(wav_np, wav_sr),
-                ref_text=ref_text if ref_text else None,
-                x_vector_only_mode=bool(x_vector_only_mode),
-                **gen_kwargs,
-            )
+            # Preferred path: pre-extracted voice prompt data
+            if ref_voice_data is not None:
+                print("[JR_Qwen3TTS] Using ref_voice_data (voice preset). ref_audio/ref_text/x_vector_only_mode are ignored.")
+                wavs, sr = model.generate_voice_clone(
+                    text=text,
+                    language=lang,
+                    voice_clone_prompt=ref_voice_data,
+                    **gen_kwargs,
+                )
+            else:
+                if ref_audio is None:
+                    raise ValueError("mode=voice_clone requires either 'ref_voice_data' or optional input 'ref_audio' (AUDIO).")
+                wav_np, wav_sr = _audio_to_np(ref_audio)
+                wavs, sr = model.generate_voice_clone(
+                    text=text,
+                    language=lang,
+                    ref_audio=(wav_np, wav_sr),
+                    ref_text=ref_text if ref_text else None,
+                    x_vector_only_mode=bool(x_vector_only_mode),
+                    **gen_kwargs,
+                )
 
         elif mode == "voice_design":
             wavs, sr = model.generate_voice_design(
@@ -315,6 +531,125 @@ class JR_Qwen3TTS_Generate:
             raise ValueError(f"Unsupported mode: {mode}")
 
         return (_np_to_audio(wavs[0], sr),)
+
+
+# ---------------------------
+# Voice prompt preprocess I/O
+# ---------------------------
+
+class JR_Qwen3TTS_ExtractAndSaveVoicePrompt:
+    """
+    Extract a reusable "voice prompt" from reference audio and persist it to disk.
+    The saved artifact can later be loaded and fed into JR_Qwen3TTS_Generate via `ref_voice_data`,
+    eliminating the need to re-enter long `ref_text` or repeatedly run extraction.
+
+    Notes:
+    - For most users, set `x_vector_only_mode=True` to avoid providing `ref_text`.
+      This uses only the speaker embedding (no ICL).
+    - If `x_vector_only_mode=False`, `ref_text` becomes mandatory (ICL mode).
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "model": ("QWEN3_TTS_MODEL",),
+                "ref_audio": ("AUDIO",),
+                "filename": ("STRING", {"default": "voice_prompt_001.pt"}),
+                "output_dir": ("STRING", {"default": ""}),
+                "x_vector_only_mode": ("BOOLEAN", {"default": True}),
+            },
+            "optional": {
+                "ref_text": ("STRING", {"multiline": True, "default": ""}),
+            },
+        }
+
+    RETURN_TYPES = ("QWEN3_TTS_VOICE_PROMPT", "STRING")
+    RETURN_NAMES = ("voice_prompt", "path")
+    FUNCTION = "extract_and_save"
+    CATEGORY = "JR/Audio/TTS"
+
+    def extract_and_save(
+        self,
+        model,
+        ref_audio: Dict[str, Any],
+        filename: str,
+        output_dir: str,
+        x_vector_only_mode: bool,
+        ref_text: str = "",
+    ):
+        wav_np, wav_sr = _audio_to_np(ref_audio)
+
+        # create_voice_clone_prompt will enforce ref_text when x_vector_only_mode=False
+        prompt_items = model.create_voice_clone_prompt(
+            ref_audio=(wav_np, wav_sr),
+            ref_text=(ref_text if ref_text else None),
+            x_vector_only_mode=bool(x_vector_only_mode),
+        )
+
+        out_dir = (output_dir or "").strip() or _default_voice_prompt_dir()
+        os.makedirs(out_dir, exist_ok=True)
+
+        name = (filename or "").strip() or "voice_prompt.pt"
+        if not name.lower().endswith((".pt", ".pth")):
+            name = name + ".pt"
+        save_path = os.path.join(out_dir, name)
+
+        # PyTorch 2.6+ defaults torch.load(weights_only=True) which blocks pickled custom classes.
+        # Save as a safe payload (dict/list + tensors) to avoid allowlisting / weights_only=False.
+        payload = _voice_prompt_to_safe_payload(prompt_items)
+        torch.save(payload, save_path)
+
+        return (prompt_items, save_path)
+
+
+class JR_Qwen3TTS_LoadVoicePrompt:
+    """Load a previously saved voice prompt (.pt/.pth) and output it as QWEN3_TTS_VOICE_PROMPT."""
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "voice_prompt_path": ("STRING", {"default": "voice_prompt_001.pt"}),
+            }
+        }
+
+    RETURN_TYPES = ("QWEN3_TTS_VOICE_PROMPT",)
+    RETURN_NAMES = ("voice_prompt",)
+    FUNCTION = "load"
+    CATEGORY = "JR/Audio/TTS"
+
+    def load(self, voice_prompt_path: str):
+        p = _resolve_voice_prompt_path(voice_prompt_path)
+        if not os.path.isfile(p):
+            raise FileNotFoundError(f"Voice prompt not found: {p}")
+        obj = torch.load(p, map_location="cpu")
+
+        # New safe format
+        if isinstance(obj, dict) and obj.get("format") == "qwen3tts_voice_prompt_v1":
+            items = obj.get("items", [])
+            # Reconstruct VoiceClonePromptItem objects expected by model.generate_voice_clone(voice_clone_prompt=...)
+            from .qwen_tts.inference.qwen3_tts_model import VoiceClonePromptItem
+
+            prompt_items = []
+            for d in items:
+                prompt_items.append(
+                    VoiceClonePromptItem(
+                        ref_code=d.get("ref_code", None),
+                        ref_spk_embedding=d["ref_spk_embedding"],
+                        x_vector_only_mode=bool(d.get("x_vector_only_mode", True)),
+                        icl_mode=bool(d.get("icl_mode", False)),
+                        ref_text=d.get("ref_text", None),
+                    )
+                )
+            return (prompt_items,)
+
+        # Old (pickled) format blocked by weights_only in PyTorch 2.6+; force user to re-extract.
+        raise ValueError(
+            "Unsupported voice prompt file format. "
+            "This file was likely saved in the old pickled-object format and is blocked by PyTorch weights_only. "
+            "Please re-run 'Extract+Save Voice Prompt' to regenerate the file with the safe format."
+        )
 
 
 class JR_Qwen3TTS_SaveWav:
@@ -358,15 +693,21 @@ class JR_Qwen3TTS_ClearCache:
 
 
 NODE_CLASS_MAPPINGS = {
+    "JR_Qwen3TTS_VoicePreset": JR_Qwen3TTS_VoicePreset,
     "JR_Qwen3TTS_Loader": JR_Qwen3TTS_Loader,
     "JR_Qwen3TTS_Generate": JR_Qwen3TTS_Generate,
+    "JR_Qwen3TTS_ExtractAndSaveVoicePrompt": JR_Qwen3TTS_ExtractAndSaveVoicePrompt,
+    "JR_Qwen3TTS_LoadVoicePrompt": JR_Qwen3TTS_LoadVoicePrompt,
     "JR_Qwen3TTS_SaveWav": JR_Qwen3TTS_SaveWav,
     "JR_Qwen3TTS_ClearCache": JR_Qwen3TTS_ClearCache,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
+    "JR_Qwen3TTS_VoicePreset": "JR Qwen3 TTS Voice Preset",
     "JR_Qwen3TTS_Loader": "JR Qwen3 TTS Loader",
     "JR_Qwen3TTS_Generate": "JR Qwen3 TTS Generate",
+    "JR_Qwen3TTS_ExtractAndSaveVoicePrompt": "JR Qwen3 TTS Extract+Save Voice Prompt",
+    "JR_Qwen3TTS_LoadVoicePrompt": "JR Qwen3 TTS Load Voice Prompt",
     "JR_Qwen3TTS_SaveWav": "JR Qwen3 TTS Save WAV",
     "JR_Qwen3TTS_ClearCache": "JR Qwen3 TTS Clear Cache",
 }

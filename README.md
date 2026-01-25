@@ -1,6 +1,3 @@
----
-
-````markdown
 # ComfyUI_JR_Qwen3TTS
 
 A ComfyUI custom node implementation for **Qwen3-TTS**, supporting **Voice Design**, **Voice Clone**, and **Custom Voice** generation modes.
@@ -8,7 +5,6 @@ A ComfyUI custom node implementation for **Qwen3-TTS**, supporting **Voice Desig
 This project focuses on **practical engineering integration** rather than model re-training, providing a **stable, high-performance, and reusable** TTS workflow inside ComfyUI.
 
 ---
-
 ## ✨ Features
 
 - 🔊 Qwen3-TTS integration for ComfyUI

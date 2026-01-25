@@ -2,3 +2,4 @@ transformers==4.57.3
 soundfile
 librosa
 numpy
+sox

@@ -9,6 +9,7 @@ import soundfile as sf
 import torch
 
 from .qwen_wrapper import load_qwen3_tts, clear_cache
+import folder_paths
 
 QWEN3_TTS_MODEL_PRESETS = [
     # Generation models (from HF collection)
@@ -20,6 +21,34 @@ QWEN3_TTS_MODEL_PRESETS = [
     # Tokenizer (not a TTS generation checkpoint; keep for advanced/debug usage)
     "Qwen/Qwen3-TTS-Tokenizer-12Hz",
 ]
+
+def _resolve_qwen_model_id_or_local_path(model_id_or_path: str) -> str:
+    """
+    Prefer local path under:
+      ComfyUI/models/qwen3_tts/<repo_basename>
+    when the input looks like a HF repo id such as:
+      Qwen/Qwen3-TTS-12Hz-1.7B-Base
+    Falls back to the original string if local dir does not exist.
+    """
+    s = (model_id_or_path or "").strip()
+    if not s:
+        return s
+
+    # Only auto-map Qwen/* patterns. If user passed a real filesystem path, keep it.
+    if os.path.isabs(s) or os.path.exists(s):
+        return s
+
+    # HF repo id pattern: "Qwen/<name>"
+    # Map "<name>" to local folder "models/qwen3_tts/<name>"
+    if s.startswith("Qwen/") and "/" in s:
+        repo_name = s.split("/", 1)[1].strip()
+        local_root = os.path.join(folder_paths.models_dir, "qwen3_tts")
+        local_dir = os.path.join(local_root, repo_name)
+        if os.path.isdir(local_dir):
+            return local_dir
+
+    return s
+  
 
 # CustomVoice models support a fixed set of premium speakers (per model README).
 QWEN3_TTS_CUSTOM_VOICE_SPEAKERS = [
@@ -168,7 +197,8 @@ class JR_Qwen3TTS_Loader:
 
 
     def load(self, model_preset: str, model_id_or_path_override: str, device_map: str, dtype: str, attn_impl: str, warmup: bool):
-        model_id_or_path = (model_id_or_path_override or "").strip() or str(model_preset)
+        raw = (model_id_or_path_override or "").strip() or str(model_preset)
+        model_id_or_path = _resolve_qwen_model_id_or_local_path(raw)
         model, _key = load_qwen3_tts(
             model_id_or_path=model_id_or_path,
             device_map=device_map,

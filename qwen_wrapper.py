@@ -7,6 +7,13 @@ import torch
 
 from .qwen_tts.inference.qwen3_tts_model import Qwen3TTSModel
 
+# ComfyUI utility for resolving the models directory.
+# Import lazily and fail gracefully if running outside ComfyUI.
+try:
+    import folder_paths  # type: ignore
+except Exception:  # pragma: no cover
+    folder_paths = None
+
 
 @dataclass(frozen=True)
 class ModelKey:
@@ -58,6 +65,57 @@ def _log_attention_backend(model: Qwen3TTSModel, requested: str):
     )
 
 
+def _get_local_qwen3_tts_dir(repo_name: str) -> str:
+    """
+    Return expected local dir:
+      <ComfyUI>/models/qwen3_tts/<repo_name>
+    """
+    if folder_paths is None:
+        return ""
+    try:
+        root = os.path.join(folder_paths.models_dir, "qwen3_tts")
+        return os.path.join(root, repo_name)
+    except Exception:
+        return ""
+
+
+def _resolve_model_path_or_repo(model_id_or_path: str) -> Tuple[str, bool]:
+    """
+    Resolve:
+      - absolute/exists path -> (same, True)
+      - 'Qwen/<repo_name>' -> (local_dir if exists, True) else (original, False)
+      - others -> (original, False)
+
+    Returns:
+      (resolved, is_local_dir)
+    """
+    s = (model_id_or_path or "").strip()
+    if not s:
+        return s, False
+
+    # Direct filesystem path
+    if os.path.isabs(s) or os.path.exists(s):
+        return s, True
+
+    # HF repo id: Qwen/<name>
+    if s.startswith("Qwen/") and "/" in s:
+        repo_name = s.split("/", 1)[1].strip()
+        local_dir = _get_local_qwen3_tts_dir(repo_name)
+        if local_dir and os.path.isdir(local_dir):
+            return local_dir, True
+
+    return s, False
+
+
+def _should_allow_online_fallback() -> bool:
+    """
+    Default: do NOT allow online (to avoid ComfyUI hang / partial cache corruption).
+    Override:
+      set JR_QWEN3TTS_ALLOW_ONLINE=1
+    """
+    v = (os.environ.get("JR_QWEN3TTS_ALLOW_ONLINE", "") or "").strip().lower()
+    return v in ("1", "true", "yes", "y", "on")
+
 
 def _parse_dtype(dtype_str: str):
     s = (dtype_str or "auto").lower()
@@ -81,8 +139,23 @@ def load_qwen3_tts(
     if not model_id_or_path:
         raise ValueError("model_id_or_path is required")
 
+    resolved, is_local = _resolve_model_path_or_repo(model_id_or_path)
+    allow_online = _should_allow_online_fallback()
+
+    # If input looks like Qwen/* but local is missing, default to a clear, actionable error.
+    if (not is_local) and str(model_id_or_path).strip().startswith("Qwen/") and (not allow_online):
+        repo_name = str(model_id_or_path).strip().split("/", 1)[1]
+        expected = _get_local_qwen3_tts_dir(repo_name) or f"<ComfyUI>/models/qwen3_tts/{repo_name}"
+        raise FileNotFoundError(
+            "JR_Qwen3TTS: model not found locally.\n"
+            f"Selected: {model_id_or_path}\n"
+            f"Expected local dir: {expected}\n"
+            "Action: run download_models.bat in ComfyUI_JR_Qwen3TTS, then restart ComfyUI.\n"
+            "If you intentionally want online download fallback, set env JR_QWEN3TTS_ALLOW_ONLINE=1."
+        )
+
     key = ModelKey(
-        model_id_or_path=str(model_id_or_path),
+        model_id_or_path=str(resolved),
         device_map=str(device_map),
         dtype=str(dtype),
         attn_impl=str(attn_impl),
@@ -99,9 +172,11 @@ def load_qwen3_tts(
         "attn_implementation": attn_impl,
         # transformers 4.57.x: torch_dtype deprecated -> use dtype
         "dtype": parsed_dtype,
+        # Strongly prefer local to avoid partial cache / multi-thread download issues in ComfyUI.
+        "local_files_only": True if is_local or (not allow_online) else False,
     }
 
-    model = Qwen3TTSModel.from_pretrained(model_id_or_path, **kwargs)
+    model = Qwen3TTSModel.from_pretrained(resolved, **kwargs)
     _log_attention_backend(model, requested=attn_impl)
 
     with _cache_lock:

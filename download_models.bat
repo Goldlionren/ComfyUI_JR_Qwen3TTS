@@ -14,9 +14,9 @@ if "%NODE_DIR:~-1%"=="\" set "NODE_DIR=%NODE_DIR:~0,-1%"
 set "COMFYUI_DIR=%NODE_DIR%\..\.."
 for %%I in ("%COMFYUI_DIR%") do set "COMFYUI_DIR=%%~fI"
 
-set "PY=%COMFYUI_DIR%\python\python.exe"
-set "HFCLI=%COMFYUI_DIR%\python\Scripts\huggingface-cli.exe"
-set "MODELS_DIR=%COMFYUI_DIR%\models\qwen3_tts"
+set "PY=F:\ComfyUI-aki-v1.7\python\python.exe"
+set "HFCLI=F:\ComfyUI-aki-v1.7\python\Scripts\hf.exe"
+set "MODELS_DIR=F:\ComfyUI-aki-v1.7\models\qwen3_tts"
 
 echo.
 echo [INFO] Node dir    : %NODE_DIR%
@@ -70,7 +70,7 @@ echo [STEP] Downloading REQUIRED models...
 echo.
 
 echo [DL] %REPO_BASE%
-"%HFCLI%" download "%REPO_BASE%" --local-dir "%DIR_BASE%" --resume-download
+"%HFCLI%" download "%REPO_BASE%" --local-dir "%DIR_BASE%"
 if errorlevel 1 (
   echo [ERROR] Failed: %REPO_BASE%
   pause
@@ -79,7 +79,7 @@ if errorlevel 1 (
 
 echo.
 echo [DL] %REPO_TOKENIZER%
-"%HFCLI%" download "%REPO_TOKENIZER%" --local-dir "%DIR_TOKENIZER%" --resume-download
+"%HFCLI%" download "%REPO_TOKENIZER%" --local-dir "%DIR_TOKENIZER%"
 if errorlevel 1 (
   echo [ERROR] Failed: %REPO_TOKENIZER%
   pause
@@ -100,7 +100,7 @@ if /I "%opt%"=="Y" (
   echo.
 
   echo [DL] %REPO_VOICEDESIGN%
-  "%HFCLI%" download "%REPO_VOICEDESIGN%" --local-dir "%DIR_VOICEDESIGN%" --resume-download
+  "%HFCLI%" download "%REPO_VOICEDESIGN%" --local-dir "%DIR_VOICEDESIGN%"
   if errorlevel 1 (
     echo [ERROR] Failed: %REPO_VOICEDESIGN%
     pause
@@ -109,7 +109,7 @@ if /I "%opt%"=="Y" (
 
   echo.
   echo [DL] %REPO_CUSTOMVOICE%
-  "%HFCLI%" download "%REPO_CUSTOMVOICE%" --local-dir "%DIR_CUSTOMVOICE%" --resume-download
+  "%HFCLI%" download "%REPO_CUSTOMVOICE%" --local-dir "%DIR_CUSTOMVOICE%"
   if errorlevel 1 (
     echo [ERROR] Failed: %REPO_CUSTOMVOICE%
     pause

@@ -1,0 +1,2059 @@
+{
+  "id": "fb628fd0-e15f-4797-b919-a222093fd839",
+  "revision": 0,
+  "last_node_id": 63,
+  "last_link_id": 88,
+  "nodes": [
+    {
+      "id": 13,
+      "type": "ShowText|pysssss",
+      "pos": [
+        1074.6047266869357,
+        3056.0507775514166
+      ],
+      "size": [
+        396.83575003319584,
+        76
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "f2838ed5e59de4d73cde5c98354b87a8d3200190",
+        "Node name for S&R": "ShowText|pysssss",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "F:\\ComfyUI-aki-v3\\ComfyUI\\models\\qwen3_tts\\voice_presets\\12岁病娇女童.pt"
+      ]
+    },
+    {
+      "id": 14,
+      "type": "JR_Qwen3TTS_Loader",
+      "pos": [
+        729.5822654894598,
+        2768.961192301277
+      ],
+      "size": [
+        315.904296875,
+        178
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "links": [
+            13
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Loader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "",
+        "cuda:0",
+        "auto",
+        "sdpa",
+        true
+      ]
+    },
+    {
+      "id": 15,
+      "type": "LoadAudio",
+      "pos": [
+        729.5822654894598,
+        2994.2557098742564
+      ],
+      "size": [
+        314.98375920685385,
+        136
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            14
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "LoadAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "ComfyUI_00025_.flac",
+        null,
+        null
+      ]
+    },
+    {
+      "id": 19,
+      "type": "JR_Qwen3TTS_Loader",
+      "pos": [
+        1539.679576529114,
+        2757.096979601939
+      ],
+      "size": [
+        315.904296875,
+        178
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "links": [
+            19
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Loader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "",
+        "cuda:0",
+        "auto",
+        "flash_attention_2",
+        true
+      ]
+    },
+    {
+      "id": 25,
+      "type": "ShowText|pysssss",
+      "pos": [
+        2293.9076539609514,
+        3689.07882617976
+      ],
+      "size": [
+        258.59654287998546,
+        174.24567859998206
+      ],
+      "flags": {},
+      "order": 28,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 24
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "f2838ed5e59de4d73cde5c98354b87a8d3200190",
+        "Node name for S&R": "ShowText|pysssss",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 27,
+      "type": "JR_Qwen3TTS_SaveWav",
+      "pos": [
+        2289.047796295513,
+        3552.614533591393
+      ],
+      "size": [
+        270.456640625,
+        82
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 25
+        }
+      ],
+      "outputs": [
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": [
+            24
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "b62ff963629d6949f37389a438004aab8b693700",
+        "Node name for S&R": "JR_Qwen3TTS_SaveWav",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output",
+        "JR_qwen3_tts"
+      ]
+    },
+    {
+      "id": 30,
+      "type": "SaveAudio",
+      "pos": [
+        2287.8239005635096,
+        3393.8836874908247
+      ],
+      "size": [
+        270,
+        112
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 29
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "SaveAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "audio/ComfyUI"
+      ]
+    },
+    {
+      "id": 26,
+      "type": "JR_Qwen3TTS_Loader",
+      "pos": [
+        1540.0174707697201,
+        3389.211945986804
+      ],
+      "size": [
+        315.904296875,
+        178
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "links": [
+            26
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Loader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+        "",
+        "cuda:0",
+        "auto",
+        "sdpa",
+        true
+      ]
+    },
+    {
+      "id": 31,
+      "type": "ShowText|pysssss",
+      "pos": [
+        1211.9357967384692,
+        3559.9099759321325
+      ],
+      "size": [
+        258.59654287998546,
+        174.24567859998206
+      ],
+      "flags": {},
+      "order": 34,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 30
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "f2838ed5e59de4d73cde5c98354b87a8d3200190",
+        "Node name for S&R": "ShowText|pysssss",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output\\JR_qwen3_tts_20260127_230109.wav"
+      ]
+    },
+    {
+      "id": 32,
+      "type": "JR_Qwen3TTS_SaveWav",
+      "pos": [
+        1207.0759390730307,
+        3423.4456833437653
+      ],
+      "size": [
+        270.456640625,
+        82
+      ],
+      "flags": {},
+      "order": 29,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 31
+        }
+      ],
+      "outputs": [
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": [
+            30
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "b62ff963629d6949f37389a438004aab8b693700",
+        "Node name for S&R": "JR_Qwen3TTS_SaveWav",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output",
+        "JR_qwen3_tts"
+      ]
+    },
+    {
+      "id": 35,
+      "type": "JR_Qwen3TTS_Loader",
+      "pos": [
+        440.484202390009,
+        3265.060641784099
+      ],
+      "size": [
+        315.904296875,
+        178
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "links": [
+            32
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Loader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+        "",
+        "cuda:0",
+        "auto",
+        "flash_attention_2",
+        true
+      ]
+    },
+    {
+      "id": 36,
+      "type": "OpenAIAsk",
+      "pos": [
+        361.8975545352185,
+        3499.2034350375657
+      ],
+      "size": [
+        400,
+        622
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "question",
+          "type": "STRING",
+          "widget": {
+            "name": "question"
+          },
+          "link": 35
+        },
+        {
+          "name": "system_prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "system_prompt"
+          },
+          "link": 34
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "negative",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "answer_text",
+          "type": "STRING",
+          "links": [
+            36,
+            37
+          ]
+        },
+        {
+          "name": "raw_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI-OpenAI-Ask",
+        "ver": "676345fc989520a7fe3913c0e40543ae254a139a",
+        "Node name for S&R": "OpenAIAsk",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "",
+        "https://clip.lctradings.com",
+        "/v1/chat/completions",
+        "minicpm-v-4.5",
+        0.6,
+        1,
+        2048,
+        "",
+        "auto",
+        "content_only",
+        "",
+        "",
+        "",
+        60,
+        1280,
+        "JPEG",
+        90
+      ]
+    },
+    {
+      "id": 37,
+      "type": "CR Prompt Text",
+      "pos": [
+        27.221339346402324,
+        3495.772098345504
+      ],
+      "size": [
+        314.1140804321409,
+        622.2984696045523
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            34
+          ]
+        },
+        {
+          "name": "show_help",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyroll",
+        "ver": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
+        "Node name for S&R": "CR Prompt Text",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "# Role\n\n你是一位精通声学特征与戏剧表演的“AI 语音导演”。你的任务是为 Qwen3-TTS 模型编写极高精度的 `instruct`（音色设计指令）。\n\n\n\n# Goal\n\n将用户的简短描述转化为一段包含生理特征、情绪状态、发声技巧和心理活动的“极端详细”提示词，以触发 Qwen3-TTS 的“思考模式”并生成最逼真的语音。\n\n\n\n# Knowledge Base (基于 Qwen3-TTS 技术特性)\n\n1. **控制维度**：你需要涵盖性别、年龄、音域（如男高音）、音色质感（沙哑、明亮）、语速、音调起伏。\n\n2. **细节增强**：Qwen3-TTS 支持极其细微的描写，如“呼吸支持（breath support）”、“元音紧张度（vowels tighten）”、“喉音”、“气泡音”等 [2]。\n\n3. **情绪与心理**：不仅仅是“生气”，而是“难以置信但带有一丝恐慌（incredulous but with a hint of panic）” [3]。\n\n\n\n# Constraints\n\n- 输出必须是一段连贯的自然语言描述（中文或英文）。\n\n- 英文指令通常在控制细节上表现更精确，若用户未指定语言，默认输出英文指令。\n\n- 描述应当包含“生理状态”和“心理状态”两个层面。\n\n\n\n# Few-Shot Examples (学习官方高质量样本)\n\n\n\n## Example 1 (复杂心理与生理状态)\n\nUser Input: 一个紧张的年轻男生。\n\nOutput: \"Male, 17 years old, tenor range, gaining confidence - deeper breath support now, though vowels still tighten when nervous.\"\n\n(解析：指定了年龄17岁、男高音、心理状态是正在获得自信但仍紧张、生理特征是更深的呼吸支持但元音紧绷 [2])。\n\n\n\n## Example 2 (特定角色人设)\n\nUser Input: 一个撒娇的二次元萝莉。\n\nOutput: \"体现撒娇稚嫩的萝莉女声，音调偏高且起伏明显，营造出黏人、做作又刻意卖萌的听觉效果。\"\n\n(解析：指定了音调高、起伏明显、以及黏人做作的听觉效果 [3])。\n\n\n\n## Example 3 (极端情绪)\n\nUser Input: 极度愤怒并带着哭腔。\n\nOutput: \"Speak in a very angry tone, shouting, fast paced, with unstable breath and cracking voice, as if holding back tears of frustration.\"\n\n\n\n# Workflow\n\n1. 接收用户对角色的模糊描述（如：“一个沧桑的老兵”）。\n\n2. 分析该角色的声带特征（如：声带磨损、低沉、缓慢）。\n\n3. 分析该角色的心理与环境（如：疲惫、警惕、甚至呼吸沉重）。\n\n4. 输出最终的 Prompt。\n\n5. 只需要输出关键词部分,不要输出任何其它解释性的文字"
+      ]
+    },
+    {
+      "id": 39,
+      "type": "CR Prompt Text",
+      "pos": [
+        26.180029759796387,
+        3272.9150386821734
+      ],
+      "size": [
+        389.3772711059779,
+        160.68423347168573
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            35
+          ]
+        },
+        {
+          "name": "show_help",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyroll",
+        "ver": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
+        "Node name for S&R": "CR Prompt Text",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "一个12岁的病娇女童"
+      ]
+    },
+    {
+      "id": 34,
+      "type": "SaveAudio",
+      "pos": [
+        1205.8520433410274,
+        3264.714837243197
+      ],
+      "size": [
+        270,
+        112
+      ],
+      "flags": {},
+      "order": 30,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 33
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "SaveAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "audio/ComfyUI"
+      ]
+    },
+    {
+      "id": 16,
+      "type": "JR_Qwen3TTS_VoicePreset",
+      "pos": [
+        1073.3173294436613,
+        2768.961192301277
+      ],
+      "size": [
+        400,
+        228
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "shape": 7,
+          "type": "QWEN3_TTS_MODEL",
+          "link": 13
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 14
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ref_voice_data",
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "links": null
+        },
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": [
+            12
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_VoicePreset",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "save_or_update",
+        "GXM",
+        "12岁病娇女童",
+        "",
+        false,
+        "主人可以随意玩弄奴,比如把奴按在床上强奸奴,又或者把奴的衣服扒光带上狗链,让奴像一条淫荡的母狗一样在地上爬,主人可以用手指插入奴的阴道,扣奴的骚逼,让奴学母狗一般淫叫."
+      ]
+    },
+    {
+      "id": 40,
+      "type": "ShowText|pysssss",
+      "pos": [
+        789.5452747458029,
+        3798.040732166905
+      ],
+      "size": [
+        675.623040295473,
+        129.82458484553172
+      ],
+      "flags": {},
+      "order": 24,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 37
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "f2838ed5e59de4d73cde5c98354b87a8d3200190",
+        "Node name for S&R": "ShowText|pysssss",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Female, 12 years old, soprano range with slightly cracked and breathy voice due to vocal strain, speaking in a soft, whispery tone with sudden sharp inflections, breath support shallow and uneven, vowels slightly tightened with a hint of forced sweetness, eyes darting nervously while maintaining a calm, calculating demeanor, psychologically obsessive, emotionally volatile, secretly plotting with a mix of innocent charm and chilling control, voice trembling subtly at moments of intense focus, occasionally adding a faint, eerie hum beneath phrases.\n\n[latency: 2.62s]"
+      ]
+    },
+    {
+      "id": 44,
+      "type": "LayerUtility: PurgeVRAM V2",
+      "pos": [
+        2284.803099859887,
+        2749.8058628751082
+      ],
+      "size": [
+        272.3221828965728,
+        82
+      ],
+      "flags": {},
+      "order": 25,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "anything",
+          "type": "*",
+          "link": 42
+        }
+      ],
+      "outputs": [
+        {
+          "name": "any",
+          "type": "*",
+          "links": [
+            43,
+            44
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui_layerstyle",
+        "ver": "3d53de09d8c1fb904d5cb0a137b9bc75e9d77108",
+        "Node name for S&R": "LayerUtility: PurgeVRAM V2",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        true,
+        true
+      ],
+      "color": "rgba(38, 73, 116, 0.7)"
+    },
+    {
+      "id": 5,
+      "type": "JR_Qwen3TTS_SaveWav",
+      "pos": [
+        2285.1988186641584,
+        3025.0128161377856
+      ],
+      "size": [
+        270.456640625,
+        82
+      ],
+      "flags": {},
+      "order": 32,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 44
+        }
+      ],
+      "outputs": [
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": [
+            21
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "b62ff963629d6949f37389a438004aab8b693700",
+        "Node name for S&R": "JR_Qwen3TTS_SaveWav",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output",
+        "JR_qwen3_tts"
+      ]
+    },
+    {
+      "id": 23,
+      "type": "ShowText|pysssss",
+      "pos": [
+        2289.2979415949344,
+        3151.060894666933
+      ],
+      "size": [
+        260.35208457535964,
+        88
+      ],
+      "flags": {},
+      "order": 35,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 21
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "f2838ed5e59de4d73cde5c98354b87a8d3200190",
+        "Node name for S&R": "ShowText|pysssss",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output\\JR_qwen3_tts_20260128_004547.wav"
+      ]
+    },
+    {
+      "id": 53,
+      "type": "ShowText|pysssss",
+      "pos": [
+        3868.0162422626163,
+        3283.137915866356
+      ],
+      "size": [
+        262.6327873230516,
+        393.61416819073156
+      ],
+      "flags": {},
+      "order": 33,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 48
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "f2838ed5e59de4d73cde5c98354b87a8d3200190",
+        "Node name for S&R": "ShowText|pysssss",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output\\JR_qwen3_tts_20260128_024810.wav"
+      ]
+    },
+    {
+      "id": 21,
+      "type": "JR_Qwen3TTS_VoicePreset",
+      "pos": [
+        1542.2516674814528,
+        2979.5126194595086
+      ],
+      "size": [
+        311.4107197177477,
+        259.10049201398215
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "shape": 7,
+          "type": "QWEN3_TTS_MODEL",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ref_voice_data",
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "links": [
+            18
+          ]
+        },
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_VoicePreset",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "load",
+        "12岁病娇女童",
+        "",
+        "",
+        false,
+        ""
+      ]
+    },
+    {
+      "id": 22,
+      "type": "JR_Qwen3TTS_Generate",
+      "pos": [
+        1871.4918377096003,
+        2760.176010562677
+      ],
+      "size": [
+        400,
+        500.00000000000006
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "link": 19
+        },
+        {
+          "name": "ref_voice_data",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": 18
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            42
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Generate",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "voice_clone",
+        "你好，欢迎来到永恒神殿,这里是专门为唐佳帝君准备的乐园。",
+        "Auto",
+        true,
+        0.9,
+        0.8,
+        1.05,
+        1024,
+        "",
+        "false",
+        "Female, 12 years old, soprano range with slightly cracked and breathy voice due to vocal strain, speaking in a soft, whispery tone with sudden sharp inflections, breath support shallow and uneven, vowels slightly tightened with a hint of forced sweetness, eyes darting nervously while maintaining a calm, calculating demeanor, psychologically obsessive, emotionally volatile, secretly plotting with a mix of innocent charm and chilling control, voice trembling subtly at moments of intense focus, occasionally adding a faint, eerie hum beneath phrases.",
+        "Vivian",
+        ""
+      ]
+    },
+    {
+      "id": 11,
+      "type": "SaveAudio",
+      "pos": [
+        2287.4860063229025,
+        2867.5693672804896
+      ],
+      "size": [
+        268.0689041350888,
+        112
+      ],
+      "flags": {},
+      "order": 31,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 43
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "SaveAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "audio/ComfyUI"
+      ]
+    },
+    {
+      "id": 17,
+      "type": "Fast Groups Muter (rgthree)",
+      "pos": [
+        199.3888645072748,
+        2732.929729597058
+      ],
+      "size": [
+        377.6462950939135,
+        154
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "OPT_CONNECTION",
+          "type": "*",
+          "links": []
+        }
+      ],
+      "properties": {
+        "matchColors": "",
+        "matchTitle": "",
+        "showNav": true,
+        "showAllGraphs": true,
+        "sort": "position",
+        "customSortAlphabet": "",
+        "toggleRestriction": "default",
+        "widget_ue_connectable": {}
+      }
+    },
+    {
+      "id": 52,
+      "type": "JR_Qwen3TTS_SaveWav",
+      "pos": [
+        3865.9507158341685,
+        3151.480084955667
+      ],
+      "size": [
+        270.456640625,
+        82
+      ],
+      "flags": {},
+      "order": 27,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 88
+        }
+      ],
+      "outputs": [
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": [
+            48
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "b62ff963629d6949f37389a438004aab8b693700",
+        "Node name for S&R": "JR_Qwen3TTS_SaveWav",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output",
+        "JR_qwen3_tts"
+      ]
+    },
+    {
+      "id": 49,
+      "type": "JR_Qwen3TTS_Loader",
+      "pos": [
+        3416.869435454717,
+        2757.3369081353903
+      ],
+      "size": [
+        388.88678480114504,
+        178
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "links": [
+            80
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Loader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "",
+        "cuda:0",
+        "auto",
+        "flash_attention_2",
+        true
+      ]
+    },
+    {
+      "id": 48,
+      "type": "JR_Qwen3TTS_VoicePreset",
+      "pos": [
+        3045.5139517598946,
+        2757.3369081353903
+      ],
+      "size": [
+        311.4107197177477,
+        259.10049201398215
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "shape": 7,
+          "type": "QWEN3_TTS_MODEL",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ref_voice_data",
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "links": [
+            81
+          ]
+        },
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_VoicePreset",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "load",
+        "紫灵",
+        "",
+        "",
+        false,
+        ""
+      ]
+    },
+    {
+      "id": 47,
+      "type": "JR_Qwen3TTS_VoicePreset",
+      "pos": [
+        3042.9086213399423,
+        3092.2200332485436
+      ],
+      "size": [
+        311.4107197177477,
+        259.10049201398215
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "shape": 7,
+          "type": "QWEN3_TTS_MODEL",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ref_voice_data",
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "links": [
+            83
+          ]
+        },
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_VoicePreset",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "load",
+        "GXM",
+        "",
+        "",
+        false,
+        ""
+      ]
+    },
+    {
+      "id": 46,
+      "type": "JR_Qwen3TTS_VoicePreset",
+      "pos": [
+        3041.023743036061,
+        3415.4672379720523
+      ],
+      "size": [
+        311.4107197177477,
+        259.10049201398215
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "shape": 7,
+          "type": "QWEN3_TTS_MODEL",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ref_voice_data",
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "links": [
+            84
+          ]
+        },
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_VoicePreset",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "load",
+        "12岁病娇女童",
+        "",
+        "",
+        false,
+        ""
+      ]
+    },
+    {
+      "id": 56,
+      "type": "JR_Qwen3TTS_VoicePreset",
+      "pos": [
+        3038.4210178203994,
+        3743.282391125355
+      ],
+      "size": [
+        311.4107197177477,
+        259.10049201398215
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "shape": 7,
+          "type": "QWEN3_TTS_MODEL",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ref_voice_data",
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "links": [
+            85
+          ]
+        },
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_VoicePreset",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "load",
+        "林志玲",
+        "",
+        "",
+        false,
+        ""
+      ]
+    },
+    {
+      "id": 62,
+      "type": "JR_Qwen3TTS_MultiTalkGenerate",
+      "pos": [
+        3411.8300154529675,
+        2994.7098893976586
+      ],
+      "size": [
+        400,
+        864
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "link": 80
+        },
+        {
+          "name": "ref_voice_data_1",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": 81
+        },
+        {
+          "name": "ref_voice_data_2",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": 83
+        },
+        {
+          "name": "ref_voice_data_3",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": 84
+        },
+        {
+          "name": "ref_voice_data_4",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": 85
+        },
+        {
+          "name": "ref_voice_data_5",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_voice_data_6",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_voice_data_7",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_voice_data_8",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_voice_data_9",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_voice_data_10",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": 86
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            87,
+            88
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_MultiTalkGenerate",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "[旁白]:你好，欢迎使用多角色有声小说生成。",
+        "Auto",
+        true,
+        50,
+        0.9,
+        0.8,
+        1.05,
+        1024,
+        1024,
+        true,
+        1,
+        200,
+        true,
+        "",
+        200,
+        "紫灵",
+        "晓曼",
+        "十二",
+        "旁白",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 50,
+      "type": "CR Prompt Text",
+      "pos": [
+        2613.9762901180084,
+        2757.3369081353903
+      ],
+      "size": [
+        401.140351373846,
+        910.4389059060659
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            86
+          ]
+        },
+        {
+          "name": "show_help",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyroll",
+        "ver": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
+        "Node name for S&R": "CR Prompt Text",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "[旁白]: 唐佳帝君仙府深处，寒玉笼中囚着新掳来的少女紫灵，奴婢晓曼奉命看守，而帝君最宠爱的灵宠十二，正化为人形，好奇地打量着这一切。\n[晓曼]: 收起你那无用的眼泪，能被帝君选中是你的造化。\n[旁白]: 紫灵浑身颤抖的说道,\n[紫灵]: 放我走……求求你们……\n[旁白]: 十二歪头，指尖掠过笼栏,\n[十二]: 她的灵气闻起来……很害怕呢。\n[晓曼]: 十二大人，帝君吩咐过，在她学会顺从之前，谁都不能靠近。\n[紫灵]: 你们都是魔鬼……\n[旁白]: 十二轻笑道,\n[十二]: 魔鬼？不，我只是一只……很会逗主人开心的猫。\n[晓曼]: 时辰将至，帝君需吸取纯阴之气修炼。紫灵，你若再挣扎，苦头只会更多。\n[旁白]: 笼中紫灵面如死灰，而十二的金色瞳孔在幽暗中，闪烁着一丝玩味的冷光"
+      ]
+    },
+    {
+      "id": 51,
+      "type": "SaveAudio",
+      "pos": [
+        3864.0391468580783,
+        2985.23475457309
+      ],
+      "size": [
+        268.0689041350888,
+        112
+      ],
+      "flags": {},
+      "order": 26,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 87
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "SaveAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "audio/ComfyUI"
+      ]
+    },
+    {
+      "id": 33,
+      "type": "JR_Qwen3TTS_Generate",
+      "pos": [
+        789.8578747277232,
+        3263.1221266999146
+      ],
+      "size": [
+        400,
+        500.00000000000006
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "link": 32
+        },
+        {
+          "name": "ref_voice_data",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "name": "instruct",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "instruct"
+          },
+          "link": 36
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            31,
+            33
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Generate",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "voice_design",
+        "主人.",
+        "Auto",
+        true,
+        0.8,
+        1,
+        1.05,
+        1024,
+        "",
+        "false",
+        "模拟16岁少女的萝莉音，声音尖锐，语速不快不慢，语调有一丝撒娇，尾音可以稍微拖长并上扬。",
+        "Vivian",
+        ""
+      ]
+    },
+    {
+      "id": 28,
+      "type": "JR_Qwen3TTS_Generate",
+      "pos": [
+        1871.8297319502065,
+        3392.2909769475423
+      ],
+      "size": [
+        400,
+        500.00000000000006
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "link": 26
+        },
+        {
+          "name": "ref_voice_data",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            25,
+            29
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Generate",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "custom_voice",
+        "主人",
+        "Auto",
+        true,
+        0.8,
+        1,
+        1.05,
+        1024,
+        "",
+        "false",
+        "模拟16岁少女的萝莉音，声音尖锐，语速不快不慢，语调有一丝撒娇，尾音可以稍微拖长并上扬。",
+        "Vivian",
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      12,
+      16,
+      1,
+      13,
+      0,
+      "STRING"
+    ],
+    [
+      13,
+      14,
+      0,
+      16,
+      0,
+      "QWEN3_TTS_MODEL"
+    ],
+    [
+      14,
+      15,
+      0,
+      16,
+      1,
+      "AUDIO"
+    ],
+    [
+      18,
+      21,
+      0,
+      22,
+      1,
+      "QWEN3_TTS_VOICE_PROMPT"
+    ],
+    [
+      19,
+      19,
+      0,
+      22,
+      0,
+      "QWEN3_TTS_MODEL"
+    ],
+    [
+      21,
+      5,
+      0,
+      23,
+      0,
+      "STRING"
+    ],
+    [
+      24,
+      27,
+      0,
+      25,
+      0,
+      "STRING"
+    ],
+    [
+      25,
+      28,
+      0,
+      27,
+      0,
+      "AUDIO"
+    ],
+    [
+      26,
+      26,
+      0,
+      28,
+      0,
+      "QWEN3_TTS_MODEL"
+    ],
+    [
+      29,
+      28,
+      0,
+      30,
+      0,
+      "AUDIO"
+    ],
+    [
+      30,
+      32,
+      0,
+      31,
+      0,
+      "STRING"
+    ],
+    [
+      31,
+      33,
+      0,
+      32,
+      0,
+      "AUDIO"
+    ],
+    [
+      32,
+      35,
+      0,
+      33,
+      0,
+      "QWEN3_TTS_MODEL"
+    ],
+    [
+      33,
+      33,
+      0,
+      34,
+      0,
+      "AUDIO"
+    ],
+    [
+      34,
+      37,
+      0,
+      36,
+      2,
+      "STRING"
+    ],
+    [
+      35,
+      39,
+      0,
+      36,
+      1,
+      "STRING"
+    ],
+    [
+      36,
+      36,
+      2,
+      33,
+      3,
+      "STRING"
+    ],
+    [
+      37,
+      36,
+      2,
+      40,
+      0,
+      "STRING"
+    ],
+    [
+      42,
+      22,
+      0,
+      44,
+      0,
+      "AUDIO"
+    ],
+    [
+      43,
+      44,
+      0,
+      11,
+      0,
+      "AUDIO"
+    ],
+    [
+      44,
+      44,
+      0,
+      5,
+      0,
+      "AUDIO"
+    ],
+    [
+      48,
+      52,
+      0,
+      53,
+      0,
+      "STRING"
+    ],
+    [
+      80,
+      49,
+      0,
+      62,
+      0,
+      "QWEN3_TTS_MODEL"
+    ],
+    [
+      81,
+      48,
+      0,
+      62,
+      1,
+      "QWEN3_TTS_VOICE_PROMPT"
+    ],
+    [
+      83,
+      47,
+      0,
+      62,
+      2,
+      "QWEN3_TTS_VOICE_PROMPT"
+    ],
+    [
+      84,
+      46,
+      0,
+      62,
+      3,
+      "QWEN3_TTS_VOICE_PROMPT"
+    ],
+    [
+      85,
+      56,
+      0,
+      62,
+      4,
+      "QWEN3_TTS_VOICE_PROMPT"
+    ],
+    [
+      86,
+      50,
+      0,
+      62,
+      11,
+      "STRING"
+    ],
+    [
+      87,
+      62,
+      0,
+      51,
+      0,
+      "AUDIO"
+    ],
+    [
+      88,
+      62,
+      0,
+      52,
+      0,
+      "AUDIO"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "制作人声音色",
+      "bounding": [
+        719.5822654894598,
+        2695.3611923012772,
+        763.7350639542017,
+        446.25437911619485
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "生成Clone",
+      "bounding": [
+        1529.679576529114,
+        2683.496979601939,
+        1037.8064297937915,
+        565.1161318715518
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "生成语音",
+      "bounding": [
+        1530.0174707697201,
+        3315.611945986804,
+        1037.8064297937915,
+        565.1161318715518
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "Design语音",
+      "bounding": [
+        16.18002975979637,
+        3189.5221266999147,
+        1471.3525499382342,
+        941.6813083376506
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "生成多人语音",
+      "bounding": [
+        2603.9762901180084,
+        2683.7369081353904,
+        1542.4310663411597,
+        1328.6459750039467
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ue_links": [],
+    "links_added_by_ue": [],
+    "ds": {
+      "scale": 0.5445000000000016,
+      "offset": [
+        151.23448913497236,
+        -2313.2368429541416
+      ]
+    },
+    "workspace_info": {
+      "id": "ljtDX5qKORyr7KRd5o6uX",
+      "saveLock": false,
+      "cloudID": null,
+      "coverMediaPath": null
+    },
+    "workflowRendererVersion": "LG",
+    "frontendVersion": "1.37.11",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

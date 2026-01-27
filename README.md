@@ -1,20 +1,24 @@
 # ComfyUI_JR_Qwen3TTS
 
-A ComfyUI custom node implementation for **Qwen3-TTS**, supporting **Voice Design**, **Voice Clone**, and **Custom Voice** generation modes.
+A ComfyUI custom node implementation for **Qwen3-TTS**, supporting **Voice Design**, **Voice Clone**, **Custom Voice**, and **Multi-Speaker Audiobook / Dialogue generation**.
 
-This project focuses on **practical engineering integration** rather than model re-training, providing a **stable, high-performance, and reusable** TTS workflow inside ComfyUI.
+This project focuses on **practical engineering integration** rather than model re-training, providing a **stable, high-performance, and reusable** TTS workflow inside ComfyUI — especially for **long-form audio and multi-character narration**.
 
 ---
+
 ## ✨ Features
 
-- 🔊 Qwen3-TTS integration for ComfyUI
-- 🎭 Voice Design (instruction-based voice generation)
-- 🎙 Voice Clone (reference-audio-based speaker cloning)
-- 🧑‍🎤 Custom Voice (official premium speakers)
-- 🎚 Model loader with dropdown presets
-- 🎛 **Voice Preset system** (extract once, reuse like a model)
-- 🚀 Optional warmup for faster first inference
-- 🛡 Safe prompt serialization (PyTorch 2.6+ compatible, no pickle)
+* 🔊 Qwen3-TTS integration for ComfyUI
+* 🎭 Voice Design (instruction-based voice generation)
+* 🎙 Voice Clone (reference-audio-based speaker cloning)
+* 🧑‍🎤 Custom Voice (official premium speakers)
+* 🎚 Model loader with dropdown presets
+* 🎛 **Voice Preset system** (extract once, reuse like a model)
+* 🗣 **Multi-Speaker / Multi-Role TTS (Audiobook / Dialogue)**
+* 🧠 **Voice library–based design (not per-prompt cloning)**
+* 🚀 Optional warmup for faster first inference
+* 🧹 **Engineered cache & memory cleanup for long audio**
+* 🛡 Safe prompt serialization (PyTorch 2.6+ compatible, no pickle)
 
 ---
 
@@ -22,11 +26,11 @@ This project focuses on **practical engineering integration** rather than model 
 
 The following official Qwen3-TTS models are supported:
 
-- `Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign`
-- `Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice`
-- `Qwen/Qwen3-TTS-12Hz-1.7B-Base`
-- `Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice`
-- `Qwen/Qwen3-TTS-12Hz-0.6B-Base`
+* `Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign`
+* `Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice`
+* `Qwen/Qwen3-TTS-12Hz-1.7B-Base`
+* `Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice`
+* `Qwen/Qwen3-TTS-12Hz-0.6B-Base`
 
 Model weights are **not included** in this repository.
 
@@ -50,7 +54,7 @@ ComfyUI/
       │  ├─ GXM.pt
       │  ├─ Vivian_ICL.pt
       │  └─ ...
-````
+```
 
 ### Resolution logic
 
@@ -84,7 +88,7 @@ Example:
 
 ### 2️⃣ Voice Clone
 
-Clone a voice using reference audio.
+Clone a voice using reference audio or a **Voice Preset**.
 
 ⚠️ **Important**
 
@@ -94,7 +98,7 @@ For `voice_clone`, `do_sample` **must be enabled**:
 do_sample = true
 ```
 
-This is required by the model to avoid degenerate long audio generation.
+This is required by the model to avoid degenerate audio generation.
 
 ---
 
@@ -116,20 +120,23 @@ Supported speakers:
 
 ---
 
-## 🎛 Voice Preset System (Recommended)
+## 🎛 Voice Preset System (Core Design)
 
 ### What is a Voice Preset?
 
-A **Voice Preset** is a **pre-extracted voice prompt** saved to disk and reused later.
+A **Voice Preset** is a **pre-extracted voice representation** stored on disk and reused later.
 
-It allows you to:
+It represents a **speaker’s timbre library**, not a temporary prompt.
+
+With Voice Presets you can:
 
 * Extract voice characteristics **once**
-* Avoid re-entering long `ref_text`
 * Avoid re-processing reference audio
-* Ensure consistent and fast voice cloning
+* Avoid re-entering long `ref_text`
+* Guarantee **consistent speaker identity**
+* Dramatically improve performance in long or repeated generations
 
-Voice Presets behave **like model presets**: select from a dropdown and use directly.
+Voice Presets behave **like model presets**: select from a dropdown and reuse directly.
 
 Preset files are stored in:
 
@@ -150,7 +157,7 @@ Use this workflow **only once per speaker**.
    * `action = save_or_update`
    * `preset_name_override = GXM` (example)
 
-### x-vector Only Mode (Fast, No ref_text)
+### x-vector Only Mode (Fast, Recommended)
 
 ```text
 x_vector_only_mode = true
@@ -161,26 +168,25 @@ ref_text = (empty)
 * No reference text required
 * Recommended for most users
 
-### ICL Mode (Higher Fidelity)
+### ICL Mode (Higher Fidelity, One-Time Cost)
 
 ```text
 x_vector_only_mode = false
 ref_text = (required, once only)
 ```
 
-* Reference text is embedded into the preset
+* Reference text embedded into the preset
 * Higher voice similarity
-* Slightly slower extraction (one-time cost)
+* Slightly slower extraction (one-time)
 
 ---
 
-## ▶️ Workflow B: Use a Voice Preset (Daily Use)
+## ▶️ Workflow B: Single-Speaker Generation (Daily Use)
 
 1. `JR Qwen3 TTS Loader`
 2. `JR Qwen3 TTS Voice Preset`
 
    * `action = load`
-   * select preset from dropdown
 3. `JR Qwen3 TTS Generate`
 
    * `mode = voice_clone`
@@ -190,17 +196,86 @@ ref_text = (required, once only)
 
 When **`ref_voice_data` is connected**:
 
-* ❗ `ref_audio` is ignored
-* ❗ `ref_text` is ignored
-* ❗ `x_vector_only_mode` is ignored
+* `ref_audio` is ignored
+* `ref_text` is ignored
+* `x_vector_only_mode` is ignored
 
 All voice behavior is **fully determined by the preset**.
 
-This guarantees:
+---
 
-* Maximum performance
-* Reproducible results
-* No parameter mismatch
+## 🗣 Multi-Speaker / Multi-Role TTS (Audiobook / Dialogue)
+
+### Overview
+
+This project provides a dedicated node:
+
+**`JR Qwen3 TTS Multi-Talk Generate`**
+
+Designed for:
+
+* Audiobooks
+* Radio dramas
+* Visual novels
+* Multi-character narration
+* Long-form dialogue
+
+### Design Philosophy
+
+Unlike prompt-based speaker switching, this implementation is:
+
+* ✅ **Voice library–driven** (each role maps to a Voice Preset)
+* ✅ Stable for **long text & many sentences**
+* ✅ Optimized for **GPU memory reuse & cleanup**
+* ✅ Suitable for production-scale narration
+
+---
+
+### Text Format
+
+Each sentence starts with a speaker tag:
+
+```text
+[旁白]: 夜色渐深，城市陷入沉睡。
+[Tom 01]: Are you still awake?
+[Alice]: 是的，我在等你。
+```
+
+Speaker names support:
+
+* Chinese
+* English
+* Numbers
+* Spaces
+
+---
+
+### Node Inputs
+
+* Up to **10 speakers**
+* Each speaker:
+
+  * `speaker_name`
+  * `ref_voice_data` (Voice Preset output)
+
+### Output Modes
+
+* **Merged output**: one complete audio with configurable gaps
+* **Per-sentence output**: one audio per sentence (for post-processing)
+
+---
+
+### Engine-Level Optimizations
+
+To support **long audio generation**, the Multi-Talk node includes:
+
+* Sentence-level inference isolation
+* Explicit GPU cache cleanup
+* Optional per-sentence memory release
+* Safe non-streaming inference path
+* Designed to avoid audio degradation in long runs
+
+This allows stable generation of **long dialogues and audiobooks** without the common “audio collapse” issues.
 
 ---
 
@@ -211,11 +286,11 @@ The `example/` directory contains:
 * 📷 Workflow screenshots
 * 📄 Step-by-step explanations
 
-These examples demonstrate:
+Including:
 
 * Voice preset creation
-* Preset-based voice cloning
-* Correct node connections
+* Multi-speaker dialogue generation
+* Recommended parameter settings
 
 ---
 
@@ -227,16 +302,12 @@ PyTorch 2.6 changed the default behavior of:
 torch.load(weights_only=True)
 ```
 
-This project **does NOT rely on pickle-based objects** for voice prompts.
+This project **does NOT rely on pickle-based objects**.
 
-Instead:
-
-* Voice presets are saved as **safe payloads** (dict + tensors only)
+* Voice presets are saved as **safe tensor payloads**
 * No `weights_only=False`
-* No `add_safe_globals`
-* No security warnings
-
-This ensures long-term compatibility and safe sharing of presets.
+* No unsafe globals
+* Safe for sharing & long-term use
 
 ---
 
@@ -253,69 +324,38 @@ Restart ComfyUI after installation.
 
 ## 📜 License
 
-This project is released under the **MIT License**.
+* Code: **MIT License**
+* Models: subject to Qwen official licenses
 
 ---
 
-# 中文说明
+# 中文说明（简要）
 
-## 项目简介
+## 项目定位
 
-**ComfyUI_JR_Qwen3TTS** 是一个将 **Qwen3-TTS** 模型完整接入 ComfyUI 的自定义节点项目，支持多种语音生成模式，并引入了工程化的 **Voice Preset（语音预设）** 体系。
+**ComfyUI_JR_Qwen3TTS** 是一个以 **工程稳定性与可复用性** 为核心目标的 Qwen3-TTS ComfyUI 插件。
 
-本项目 **不包含模型权重**，仅提供 ComfyUI 推理节点与封装逻辑。
+其核心思想是：
 
----
+> **先建立人声音色库（Voice Preset），再基于音色库进行生成**
 
-## 核心特性
-
-* Qwen3-TTS 的 ComfyUI 工程化集成
-* 支持 Voice Design / Voice Clone / Custom Voice
-* 模型与语音均支持下拉选择
-* 语音预设一次提取，多次复用
-* 兼容 PyTorch 2.6+ 的安全加载机制
-* 保留 legacy 节点，方便后续扩展与二次开发
+而不是在每次生成中临时拼接 prompt。
 
 ---
 
-## Voice Preset 说明
+## 多角色有声小说能力
 
-Voice Preset 是将 **参考音频（及可选 ref_text）预处理并固化** 的语音配置文件。
-
-使用 Voice Preset 后：
-
-* 不再需要每次输入 ref_text
-* 不再重复处理 reference audio
-* 推理速度显著提升
-* 行为完全可复现
-
-推荐在所有 **voice_clone** 场景中使用。
-
----
-
-## Voice Clone 注意事项
-
-使用 **voice_clone** 模式时：
-
-```text
-do_sample = true
-```
-
-否则模型可能生成异常长的无效音频，这是模型本身的限制。
-
----
-
-## License 与模型声明
-
-* 本项目代码遵循 **MIT License**
-* Qwen3-TTS 模型及权重遵循官方 License
-* 商业或分发前请自行确认模型授权条款
+* 基于 Voice Preset 的多角色系统
+* 一个角色 = 一个稳定音色
+* 支持长文本、多角色连续生成
+* 内置缓存与显存清理优化
+* 适合有声书、广播剧、剧情配音等场景
 
 ---
 
 ## 致谢
 
 * Qwen Team for Qwen3-TTS
-* ComfyUI community
+* ComfyUI Community
 
-```
+

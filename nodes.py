@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import time
 from typing import Any, Dict, Tuple, Optional, List
 
@@ -533,6 +534,224 @@ class JR_Qwen3TTS_Generate:
         return (_np_to_audio(wavs[0], sr),)
 
 
+class JR_Qwen3TTS_MultiTalkGenerate:
+    @classmethod
+    def INPUT_TYPES(cls):
+        # Up to 10 speakers. Provide matching speaker_name_i + ref_voice_data_i.
+        optional = {
+            "gap_ms": ("INT", {"default": 200, "min": 0, "max": 5000, "step": 10}),
+        }
+        for i in range(1, 11):
+            optional[f"speaker_{i}_name"] = ("STRING", {"default": ""})
+            optional[f"ref_voice_data_{i}"] = (QWEN3_TTS_VOICE_PROMPT,)
+
+        return {
+            "required": {
+                "model": ("QWEN3_TTS_MODEL",),
+                "text": ("STRING", {"multiline": True, "default": "[旁白]:你好，欢迎使用多角色有声小说生成。"}),
+                "language": ("STRING", {"default": "Auto"}),
+
+                "do_sample": ("BOOLEAN", {"default": True}),
+                "top_k": ("INT", {"default": 50, "min": 0, "max": 500, "step": 1}),
+                "top_p": ("FLOAT", {"default": 0.9, "min": 0.0, "max": 1.0, "step": 0.01}),
+                "temperature": ("FLOAT", {"default": 0.8, "min": 0.1, "max": 2.0, "step": 0.01}),
+                "repetition_penalty": ("FLOAT", {"default": 1.05, "min": 0.8, "max": 2.0, "step": 0.01}),
+                "max_new_tokens": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 64}),
+                "non_streaming_mode": ("BOOLEAN", {"default": True}),
+                "cleanup_each_sentence": ("BOOLEAN", {"default": True}),
+                "cleanup_every_n": ("INT", {"default": 1, "min": 1, "max": 50, "step": 1}),
+                "do_cuda_synchronize_before_cleanup": ("BOOLEAN", {"default": False}),
+"merge_output": ("BOOLEAN", {"default": True}),
+                "unload_model_after": ("BOOLEAN", {"default": False}),
+            },
+            "optional": optional,
+        }
+
+    RETURN_TYPES = ("AUDIO",)
+    RETURN_NAMES = ("audio",)
+    FUNCTION = "generate"
+    CATEGORY = "JR/Audio/TTS"
+
+    _TAG_RE = re.compile(r"\[([^\]]+)\]\s*:\s*")
+
+    def _build_speaker_map(self, kwargs: Dict[str, Any]) -> Tuple[Dict[str, Any], Optional[Any], str]:
+        speaker_map: Dict[str, Any] = {}
+        default_prompt = None
+        default_name = ""
+        for i in range(1, 11):
+            name = (kwargs.get(f"speaker_{i}_name") or "").strip()
+            prompt = kwargs.get(f"ref_voice_data_{i}")
+            if prompt is None:
+                continue
+            if not name:
+                name = f"speaker_{i}"
+            if default_prompt is None:
+                default_prompt = prompt
+                default_name = name
+            speaker_map[name] = prompt
+
+        return speaker_map, default_prompt, default_name
+
+    def _parse_dialogue(self, raw: str) -> List[Tuple[str, str]]:
+        s = (raw or "").strip()
+        if not s:
+            return []
+        matches = list(self._TAG_RE.finditer(s))
+        if not matches:
+            # No tags found: treat entire input as narrator text
+            return [("旁白", s)]
+
+        segs: List[Tuple[str, str]] = []
+        for idx, m in enumerate(matches):
+            name = (m.group(1) or "").strip()
+            start = m.end()
+            end = matches[idx + 1].start() if (idx + 1) < len(matches) else len(s)
+            content = s[start:end].strip()
+            if not content:
+                continue
+            segs.append((name, content))
+        return segs
+
+    def _concat_with_gaps(self, parts: List[np.ndarray], sr: int, gap_ms: int) -> np.ndarray:
+        if not parts:
+            return np.zeros((0,), dtype=np.float32)
+        gap = int(sr * max(0, int(gap_ms)) / 1000)
+        if gap <= 0:
+            return np.concatenate(parts, axis=0).astype(np.float32)
+        sil = np.zeros((gap,), dtype=np.float32)
+        out = []
+        for i, p in enumerate(parts):
+            out.append(np.asarray(p, dtype=np.float32).reshape(-1))
+            if i != len(parts) - 1:
+                out.append(sil)
+        return np.concatenate(out, axis=0).astype(np.float32)
+
+    def generate(
+        self,
+        model,
+        text: str,
+        language: str,
+        do_sample: bool,
+        top_k: int,
+        top_p: float,
+        temperature: float,
+        repetition_penalty: float,
+        max_new_tokens: int,
+        non_streaming_mode: bool,
+        cleanup_each_sentence: bool,
+        cleanup_every_n: int,
+        do_cuda_synchronize_before_cleanup: bool,
+        merge_output: bool,
+        unload_model_after: bool,
+        **kwargs,
+    ):
+        gen_kwargs = dict(
+            do_sample=bool(do_sample),
+            top_k=int(top_k),
+            top_p=float(top_p),
+            temperature=float(temperature),
+            repetition_penalty=float(repetition_penalty),
+            max_new_tokens=int(max_new_tokens),
+        )
+        lang = language if language else "Auto"
+        gap_ms = int(kwargs.get("gap_ms", 200))
+
+        speaker_map, default_prompt, default_name = self._build_speaker_map(kwargs)
+        if default_prompt is None:
+            raise ValueError("Multi-talk requires at least one ref_voice_data input (ref_voice_data_1..ref_voice_data_10).")
+
+        segments = self._parse_dialogue(text)
+        if not segments:
+            raise ValueError("No dialogue segments found in text. Expected format: [Speaker]:text ...")
+
+        # Prefer explicit narrator voice if provided
+        narrator_prompt = speaker_map.get("旁白") or speaker_map.get("[旁白]") or default_prompt
+
+        wav_parts: List[np.ndarray] = []
+        out_sr: Optional[int] = None
+
+        for spk, utt in segments:
+            print(f"开始处理:'{spk}'.")
+            prompt = speaker_map.get(spk)
+            if prompt is None:
+                # Fallback to narrator, but do not break output
+                print(f"[JR_Qwen3TTS] [MultiTalk] Speaker not found: '{spk}'. Using narrator/default voice instead.")
+                prompt = narrator_prompt
+
+            with torch.inference_mode():
+                # Avoid the pseudo-streaming path by default. Only pass if supported.
+                extra = {}
+                try:
+                    import inspect
+                    if "non_streaming_mode" in inspect.signature(model.generate_voice_clone).parameters:
+                        extra["non_streaming_mode"] = bool(non_streaming_mode)
+                except Exception:
+                    pass
+
+                wavs, sr = model.generate_voice_clone(
+                    text=utt,
+                    language=lang,
+                    voice_clone_prompt=prompt,
+                    **gen_kwargs,
+                    **extra,
+                )
+            # Optional per-sentence cleanup to reduce VRAM fragmentation / cache thrash.
+            if cleanup_each_sentence and torch.cuda.is_available():
+                try:
+                    if do_cuda_synchronize_before_cleanup:
+                        torch.cuda.synchronize()
+                    if (len(wav_parts) + 1) % max(1, int(cleanup_every_n)) == 0:
+                        torch.cuda.empty_cache()
+                        try:
+                            torch.cuda.ipc_collect()
+                        except Exception:
+                            pass
+                except Exception:
+                    pass
+            print(f"清理缓存完毕:'{spk}'.")
+            w = np.asarray(wavs[0], dtype=np.float32).reshape(-1)
+            try:
+                del wavs
+            except Exception:
+                pass
+            if out_sr is None:
+                out_sr = int(sr)
+            elif int(sr) != int(out_sr):
+                raise ValueError(f"Sample rate mismatch in multi-talk generation: got {sr} but expected {out_sr}.")
+            wav_parts.append(w)
+
+        if out_sr is None:
+            out_sr = 16000
+
+        final_wav = self._concat_with_gaps(wav_parts, out_sr, gap_ms=gap_ms)
+
+        # Output control:
+        # - merge_output=True  -> return a single merged AUDIO
+        # - merge_output=False -> return a list[AUDIO], one per segment (ComfyUI will map downstream nodes)
+        if merge_output:
+            out_audio = _np_to_audio(final_wav, out_sr)
+        else:
+            out_audio = [_np_to_audio(w, out_sr) for w in wav_parts]
+
+        # Optional: unload model and clear caches after generation
+        if unload_model_after:
+            try:
+                if hasattr(model, "unload") and callable(getattr(model, "unload")):
+                    model.unload()
+                else:
+                    clear_cache()
+            except Exception as e:
+                print(f"[JR_Qwen3TTS] [MultiTalk] unload_model_after failed: {type(e).__name__}: {e}")
+            try:
+                import gc
+                gc.collect()
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+            except Exception:
+                pass
+
+        return (out_audio,)
+
 # ---------------------------
 # Voice prompt preprocess I/O
 # ---------------------------
@@ -696,6 +915,7 @@ NODE_CLASS_MAPPINGS = {
     "JR_Qwen3TTS_VoicePreset": JR_Qwen3TTS_VoicePreset,
     "JR_Qwen3TTS_Loader": JR_Qwen3TTS_Loader,
     "JR_Qwen3TTS_Generate": JR_Qwen3TTS_Generate,
+    "JR_Qwen3TTS_MultiTalkGenerate": JR_Qwen3TTS_MultiTalkGenerate,
     "JR_Qwen3TTS_ExtractAndSaveVoicePrompt": JR_Qwen3TTS_ExtractAndSaveVoicePrompt,
     "JR_Qwen3TTS_LoadVoicePrompt": JR_Qwen3TTS_LoadVoicePrompt,
     "JR_Qwen3TTS_SaveWav": JR_Qwen3TTS_SaveWav,
@@ -706,6 +926,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "JR_Qwen3TTS_VoicePreset": "JR Qwen3 TTS Voice Preset",
     "JR_Qwen3TTS_Loader": "JR Qwen3 TTS Loader",
     "JR_Qwen3TTS_Generate": "JR Qwen3 TTS Generate",
+    "JR_Qwen3TTS_MultiTalkGenerate": "JR Qwen3 TTS multi-talk Generate",
     "JR_Qwen3TTS_ExtractAndSaveVoicePrompt": "JR Qwen3 TTS Extract+Save Voice Prompt",
     "JR_Qwen3TTS_LoadVoicePrompt": "JR Qwen3 TTS Load Voice Prompt",
     "JR_Qwen3TTS_SaveWav": "JR Qwen3 TTS Save WAV",

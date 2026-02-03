@@ -1,7 +1,8 @@
 import threading
 from dataclasses import dataclass
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, Tuple, Optional
 import os
+import gc
 
 import torch
 
@@ -185,12 +186,65 @@ def load_qwen3_tts(
     return model, key
 
 
-def clear_cache() -> int:
-    with _cache_lock:
-        n = len(_model_cache)
-        _model_cache.clear()
+def _unload_one(model: Qwen3TTSModel):
+    """
+    Best-effort hard unload:
+    - move to CPU to actually release GPU allocations
+    - call model.unload() if present
+    - drop references
+    """
     try:
-        torch.cuda.empty_cache()
+        if hasattr(model, "unload") and callable(getattr(model, "unload")):
+            model.unload()
+    except Exception:
+        pass
+    try:
+        model.to("cpu")
+    except Exception:
+        pass
+
+
+def clear_cache(key: Optional[ModelKey] = None) -> int:
+    """
+    Clear model cache.
+    - key is None: clear all cached models
+    - key provided: clear only that entry (precision unload)
+    Returns number of removed models.
+    """
+    removed: Dict[ModelKey, Qwen3TTSModel] = {}
+    with _cache_lock:
+        if key is None:
+            removed = dict(_model_cache)
+            _model_cache.clear()
+        else:
+            m = _model_cache.pop(key, None)
+            if m is not None:
+                removed[key] = m
+
+    # Hard unload outside lock
+    n = len(removed)
+    for _, m in removed.items():
+        try:
+            _unload_one(m)
+        except Exception:
+            pass
+        try:
+            del m
+        except Exception:
+            pass
+
+    # Force Python + CUDA allocator cleanup
+    try:
+        gc.collect()
+    except Exception:
+        pass
+    try:
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            try:
+                torch.cuda.ipc_collect()
+            except Exception:
+                pass
     except Exception:
         pass
     return n

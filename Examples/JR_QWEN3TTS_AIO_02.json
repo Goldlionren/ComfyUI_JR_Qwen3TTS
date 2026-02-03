@@ -1,0 +1,2330 @@
+{
+  "id": "fb628fd0-e15f-4797-b919-a222093fd839",
+  "revision": 0,
+  "last_node_id": 71,
+  "last_link_id": 94,
+  "nodes": [
+    {
+      "id": 13,
+      "type": "ShowText|pysssss",
+      "pos": [
+        1076.5158468284553,
+        2375.8108216015135
+      ],
+      "size": [
+        396.83575003319584,
+        76
+      ],
+      "flags": {},
+      "order": 29,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "f2838ed5e59de4d73cde5c98354b87a8d3200190",
+        "Node name for S&R": "ShowText|pysssss",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "D:\\ComfyUI-aki-v3\\ComfyUI\\models\\qwen3_tts\\voice_presets\\碧瑶.pt"
+      ]
+    },
+    {
+      "id": 14,
+      "type": "JR_Qwen3TTS_Loader",
+      "pos": [
+        731.49338563098,
+        2088.7212363513736
+      ],
+      "size": [
+        315.904296875,
+        178
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "links": [
+            13
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Loader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "",
+        "cuda:0",
+        "auto",
+        "sdpa",
+        true
+      ]
+    },
+    {
+      "id": 19,
+      "type": "JR_Qwen3TTS_Loader",
+      "pos": [
+        1515.1486800613145,
+        2090.9553282957554
+      ],
+      "size": [
+        315.904296875,
+        178
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "links": [
+            19
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Loader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "",
+        "cuda:0",
+        "auto",
+        "flash_attention_2",
+        true
+      ]
+    },
+    {
+      "id": 25,
+      "type": "ShowText|pysssss",
+      "pos": [
+        -28.193482728331688,
+        2519.4968925651165
+      ],
+      "size": [
+        258.59654287998546,
+        174.24567859998206
+      ],
+      "flags": {},
+      "order": 34,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 24
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "f2838ed5e59de4d73cde5c98354b87a8d3200190",
+        "Node name for S&R": "ShowText|pysssss",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output\\JR_qwen3_tts_20260203_131559.wav"
+      ]
+    },
+    {
+      "id": 27,
+      "type": "JR_Qwen3TTS_SaveWav",
+      "pos": [
+        -33.05334039377023,
+        2383.032599976749
+      ],
+      "size": [
+        270.456640625,
+        82
+      ],
+      "flags": {},
+      "order": 25,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 25
+        }
+      ],
+      "outputs": [
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": [
+            24
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "b62ff963629d6949f37389a438004aab8b693700",
+        "Node name for S&R": "JR_Qwen3TTS_SaveWav",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output",
+        "JR_qwen3_tts"
+      ]
+    },
+    {
+      "id": 31,
+      "type": "ShowText|pysssss",
+      "pos": [
+        401.2694302761371,
+        1557.494986130113
+      ],
+      "size": [
+        258.59654287998546,
+        174.24567859998206
+      ],
+      "flags": {},
+      "order": 38,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 30
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "f2838ed5e59de4d73cde5c98354b87a8d3200190",
+        "Node name for S&R": "ShowText|pysssss",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output\\JR_qwen3_tts_20260203_132840.wav"
+      ]
+    },
+    {
+      "id": 32,
+      "type": "JR_Qwen3TTS_SaveWav",
+      "pos": [
+        396.40957261069866,
+        1421.0306935417457
+      ],
+      "size": [
+        270.456640625,
+        82
+      ],
+      "flags": {},
+      "order": 32,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 31
+        }
+      ],
+      "outputs": [
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": [
+            30
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "b62ff963629d6949f37389a438004aab8b693700",
+        "Node name for S&R": "JR_Qwen3TTS_SaveWav",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output",
+        "JR_qwen3_tts"
+      ]
+    },
+    {
+      "id": 35,
+      "type": "JR_Qwen3TTS_Loader",
+      "pos": [
+        -370.18216407232285,
+        1262.6456519820795
+      ],
+      "size": [
+        315.904296875,
+        178
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "links": [
+            32
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Loader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+        "",
+        "cuda:0",
+        "auto",
+        "flash_attention_2",
+        true
+      ]
+    },
+    {
+      "id": 36,
+      "type": "OpenAIAsk",
+      "pos": [
+        -448.76881192711323,
+        1496.788445235546
+      ],
+      "size": [
+        400,
+        622
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "question",
+          "type": "STRING",
+          "widget": {
+            "name": "question"
+          },
+          "link": 35
+        },
+        {
+          "name": "system_prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "system_prompt"
+          },
+          "link": 34
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "negative",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "answer_text",
+          "type": "STRING",
+          "links": [
+            36,
+            37
+          ]
+        },
+        {
+          "name": "raw_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI-OpenAI-Ask",
+        "ver": "676345fc989520a7fe3913c0e40543ae254a139a",
+        "Node name for S&R": "OpenAIAsk",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "",
+        "https://clip.lctradings.com",
+        "/v1/chat/completions",
+        "minicpm-v-4.5",
+        0.6,
+        1,
+        2048,
+        "",
+        "auto",
+        "content_only",
+        "",
+        "",
+        "",
+        60,
+        1280,
+        "JPEG",
+        90
+      ]
+    },
+    {
+      "id": 37,
+      "type": "CR Prompt Text",
+      "pos": [
+        -783.4450271159292,
+        1493.3571085434846
+      ],
+      "size": [
+        314.1140804321409,
+        622.2984696045523
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            34
+          ]
+        },
+        {
+          "name": "show_help",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyroll",
+        "ver": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
+        "Node name for S&R": "CR Prompt Text",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "# Role\n\n你是一位精通声学特征与戏剧表演的“AI 语音导演”。你的任务是为 Qwen3-TTS 模型编写极高精度的 `instruct`（音色设计指令）。\n\n\n\n# Goal\n\n将用户的简短描述转化为一段包含生理特征、情绪状态、发声技巧和心理活动的“极端详细”提示词，以触发 Qwen3-TTS 的“思考模式”并生成最逼真的语音。\n\n\n\n# Knowledge Base (基于 Qwen3-TTS 技术特性)\n\n1. **控制维度**：你需要涵盖性别、年龄、音域（如男高音）、音色质感（沙哑、明亮）、语速、音调起伏。\n\n2. **细节增强**：Qwen3-TTS 支持极其细微的描写，如“呼吸支持（breath support）”、“元音紧张度（vowels tighten）”、“喉音”、“气泡音”等 [2]。\n\n3. **情绪与心理**：不仅仅是“生气”，而是“难以置信但带有一丝恐慌（incredulous but with a hint of panic）” [3]。\n\n\n\n# Constraints\n\n- 输出必须是一段连贯的自然语言描述（中文或英文）。\n\n- 英文指令通常在控制细节上表现更精确，若用户未指定语言，默认输出英文指令。\n\n- 描述应当包含“生理状态”和“心理状态”两个层面。\n\n\n\n# Few-Shot Examples (学习官方高质量样本)\n\n\n\n## Example 1 (复杂心理与生理状态)\n\nUser Input: 一个紧张的年轻男生。\n\nOutput: \"Male, 17 years old, tenor range, gaining confidence - deeper breath support now, though vowels still tighten when nervous.\"\n\n(解析：指定了年龄17岁、男高音、心理状态是正在获得自信但仍紧张、生理特征是更深的呼吸支持但元音紧绷 [2])。\n\n\n\n## Example 2 (特定角色人设)\n\nUser Input: 一个撒娇的二次元萝莉。\n\nOutput: \"体现撒娇稚嫩的萝莉女声，音调偏高且起伏明显，营造出黏人、做作又刻意卖萌的听觉效果。\"\n\n(解析：指定了音调高、起伏明显、以及黏人做作的听觉效果 [3])。\n\n\n\n## Example 3 (极端情绪)\n\nUser Input: 极度愤怒并带着哭腔。\n\nOutput: \"Speak in a very angry tone, shouting, fast paced, with unstable breath and cracking voice, as if holding back tears of frustration.\"\n\n\n\n# Workflow\n\n1. 接收用户对角色的模糊描述（如：“一个沧桑的老兵”）。\n\n2. 分析该角色的声带特征（如：声带磨损、低沉、缓慢）。\n\n3. 分析该角色的心理与环境（如：疲惫、警惕、甚至呼吸沉重）。\n\n4. 输出最终的 Prompt。\n\n5. 只需要输出关键词部分,不要输出任何其它解释性的文字"
+      ]
+    },
+    {
+      "id": 39,
+      "type": "CR Prompt Text",
+      "pos": [
+        -784.4863367025353,
+        1270.5000488801538
+      ],
+      "size": [
+        389.3772711059779,
+        160.68423347168573
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            35
+          ]
+        },
+        {
+          "name": "show_help",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyroll",
+        "ver": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
+        "Node name for S&R": "CR Prompt Text",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "一个12岁的病娇女童"
+      ]
+    },
+    {
+      "id": 40,
+      "type": "ShowText|pysssss",
+      "pos": [
+        -21.12109171652898,
+        1795.6257423648858
+      ],
+      "size": [
+        675.623040295473,
+        129.82458484553172
+      ],
+      "flags": {},
+      "order": 24,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 37
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "f2838ed5e59de4d73cde5c98354b87a8d3200190",
+        "Node name for S&R": "ShowText|pysssss",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Female, 12 years old, soprano range with slightly cracked and breathy vocal quality, whispering with sudden sharp rises in pitch when possessive—vowels tighten with controlled tension, breath support shallow yet deliberate, eyes darting with manic focus, voice trembling with suppressed obsession, rhythmic pauses between phrases to simulate obsessive counting or internal monologue, emotional state: unnervingly affectionate yet dangerously possessive, mind fixated on \"belonging\" with the target, voice carries a faint echo of childish innocence masking chilling calculation.\n\n[latency: 7.20s]"
+      ]
+    },
+    {
+      "id": 44,
+      "type": "LayerUtility: PurgeVRAM V2",
+      "pos": [
+        2260.2722033920895,
+        2083.664211568924
+      ],
+      "size": [
+        272.3221828965728,
+        82
+      ],
+      "flags": {},
+      "order": 30,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "anything",
+          "type": "*",
+          "link": 42
+        }
+      ],
+      "outputs": [
+        {
+          "name": "any",
+          "type": "*",
+          "links": [
+            43,
+            44
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui_layerstyle",
+        "ver": "3d53de09d8c1fb904d5cb0a137b9bc75e9d77108",
+        "Node name for S&R": "LayerUtility: PurgeVRAM V2",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        true,
+        true
+      ],
+      "color": "rgba(38, 73, 116, 0.7)"
+    },
+    {
+      "id": 5,
+      "type": "JR_Qwen3TTS_SaveWav",
+      "pos": [
+        2260.667922196361,
+        2358.8711648316016
+      ],
+      "size": [
+        270.456640625,
+        82
+      ],
+      "flags": {},
+      "order": 37,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 44
+        }
+      ],
+      "outputs": [
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": [
+            21
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "b62ff963629d6949f37389a438004aab8b693700",
+        "Node name for S&R": "JR_Qwen3TTS_SaveWav",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output",
+        "JR_qwen3_tts"
+      ]
+    },
+    {
+      "id": 23,
+      "type": "ShowText|pysssss",
+      "pos": [
+        2264.7670451271365,
+        2484.919243360749
+      ],
+      "size": [
+        260.35208457535964,
+        88
+      ],
+      "flags": {},
+      "order": 39,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 21
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "f2838ed5e59de4d73cde5c98354b87a8d3200190",
+        "Node name for S&R": "ShowText|pysssss",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output\\JR_qwen3_tts_20260203_132504.wav"
+      ]
+    },
+    {
+      "id": 53,
+      "type": "ShowText|pysssss",
+      "pos": [
+        3834.658977293457,
+        2619.4380282751495
+      ],
+      "size": [
+        262.6327873230516,
+        393.61416819073156
+      ],
+      "flags": {},
+      "order": 35,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 48
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "f2838ed5e59de4d73cde5c98354b87a8d3200190",
+        "Node name for S&R": "ShowText|pysssss",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output\\JR_qwen3_tts_20260203_125348.wav"
+      ]
+    },
+    {
+      "id": 52,
+      "type": "JR_Qwen3TTS_SaveWav",
+      "pos": [
+        3832.5934508650093,
+        2487.7801973644605
+      ],
+      "size": [
+        270.456640625,
+        82
+      ],
+      "flags": {},
+      "order": 28,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 88
+        }
+      ],
+      "outputs": [
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": [
+            48
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "b62ff963629d6949f37389a438004aab8b693700",
+        "Node name for S&R": "JR_Qwen3TTS_SaveWav",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "output",
+        "JR_qwen3_tts"
+      ]
+    },
+    {
+      "id": 49,
+      "type": "JR_Qwen3TTS_Loader",
+      "pos": [
+        3383.5121704855596,
+        2093.637020544184
+      ],
+      "size": [
+        388.88678480114504,
+        178
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "links": [
+            80
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Loader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+        "",
+        "cuda:0",
+        "auto",
+        "flash_attention_2",
+        true
+      ]
+    },
+    {
+      "id": 56,
+      "type": "JR_Qwen3TTS_VoicePreset",
+      "pos": [
+        3005.063752851242,
+        3079.5825035341486
+      ],
+      "size": [
+        311.4107197177477,
+        259.10049201398215
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "shape": 7,
+          "type": "QWEN3_TTS_MODEL",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ref_voice_data",
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "links": [
+            85
+          ]
+        },
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_VoicePreset",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "load",
+        "林志玲",
+        "",
+        "",
+        false,
+        ""
+      ]
+    },
+    {
+      "id": 26,
+      "type": "JR_Qwen3TTS_Loader",
+      "pos": [
+        -782.0836659195604,
+        2219.6300123721603
+      ],
+      "size": [
+        315.904296875,
+        178
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "links": [
+            26
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Loader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+        "",
+        "cuda:0",
+        "auto",
+        "sdpa",
+        true
+      ]
+    },
+    {
+      "id": 47,
+      "type": "JR_Qwen3TTS_VoicePreset",
+      "pos": [
+        3009.551356370785,
+        2428.5201456573373
+      ],
+      "size": [
+        311.4107197177477,
+        259.10049201398215
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "shape": 7,
+          "type": "QWEN3_TTS_MODEL",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ref_voice_data",
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "links": [
+            83
+          ]
+        },
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_VoicePreset",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "load",
+        "GXM",
+        "",
+        "",
+        false,
+        ""
+      ]
+    },
+    {
+      "id": 46,
+      "type": "JR_Qwen3TTS_VoicePreset",
+      "pos": [
+        3007.666478066904,
+        2751.767350380846
+      ],
+      "size": [
+        311.4107197177477,
+        259.10049201398215
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "shape": 7,
+          "type": "QWEN3_TTS_MODEL",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ref_voice_data",
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "links": [
+            84
+          ]
+        },
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_VoicePreset",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "load",
+        "12岁病娇女童",
+        "",
+        "",
+        false,
+        ""
+      ]
+    },
+    {
+      "id": 48,
+      "type": "JR_Qwen3TTS_VoicePreset",
+      "pos": [
+        3012.1566867907372,
+        2093.637020544184
+      ],
+      "size": [
+        311.4107197177477,
+        259.10049201398215
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 10,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "shape": 7,
+          "type": "QWEN3_TTS_MODEL",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ref_voice_data",
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "links": [
+            81
+          ]
+        },
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_VoicePreset",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "load",
+        "紫灵",
+        "",
+        "",
+        false,
+        ""
+      ]
+    },
+    {
+      "id": 62,
+      "type": "JR_Qwen3TTS_MultiTalkGenerate",
+      "pos": [
+        3378.47275048381,
+        2331.0100018064522
+      ],
+      "size": [
+        400,
+        864
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "link": 80
+        },
+        {
+          "name": "ref_voice_data_1",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": 81
+        },
+        {
+          "name": "ref_voice_data_2",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": 83
+        },
+        {
+          "name": "ref_voice_data_3",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": 84
+        },
+        {
+          "name": "ref_voice_data_4",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": 85
+        },
+        {
+          "name": "ref_voice_data_5",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_voice_data_6",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_voice_data_7",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_voice_data_8",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_voice_data_9",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_voice_data_10",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": 86
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            87,
+            88
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_MultiTalkGenerate",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "[旁白]:你好，欢迎使用多角色有声小说生成。",
+        "Auto",
+        true,
+        50,
+        0.9,
+        0.8,
+        1.05,
+        1024,
+        1024,
+        true,
+        1,
+        200,
+        true,
+        true,
+        200,
+        "绝色少女",
+        "温天仁",
+        "韩立",
+        "旁白",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 50,
+      "type": "CR Prompt Text",
+      "pos": [
+        2580.619025148851,
+        2093.637020544184
+      ],
+      "size": [
+        408.486540538217,
+        1183.717232495826
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            86
+          ]
+        },
+        {
+          "name": "show_help",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyroll",
+        "ver": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
+        "Node name for S&R": "CR Prompt Text",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "[旁白]:经过此事，韩立自然知道后来之人并非普通的修士，也没有心情和那鬼鬼祟祟的白影纠缠什么，马上催动噬金虫所化巨矛轻易击毙了白影。如今他才可以全心应对新到的结丹后期的家伙。\n[旁白]:回看了下谷中的情形。\n[旁白]:韩立看到阵法处已经被一团漆黑如墨的阴气围的水泄不通，估计元瑶的还魂术也到了关键时刻，若被人打扰，恐怕非但妍丽无法救活，就是此女自身也会功法反噬，受伤不轻。\n[旁白]:韩立眉头皱了皱，回过头来沉吟一下。\n[旁白]:虽然不知道青年是何方神圣，但光神识就强大如斯，这就让他不敢小瞧分毫。当然他也没什么惧色，他自信以自己的法宝神通，结丹修士中没人能对他造成威胁。\n[旁白]:他正在思量，要不要主动打发掉此人。毕竟对方看起来还是有些棘手，万一和其他修士联手的话，还是个不小的麻烦。忽然有所感应脸色微变，眼睛一缩的猛然站起身来。\n[旁白]:那男子竟带着身边的绝色少女，离开了兽车，向这里飞遁而来。\n[旁白]:韩立脸色一沉，两手一抬，放出十几只巨猿傀儡在了原地，以防自己不在时被一些宵小钻了空子，自己则毫不迟疑的一跺足，化为一道青虹，迎向那对男女。\n[旁白]:他们这种等级修士若是在附近交锋，很可能波及了谷中释法的元瑶。而对方看起来不弱，估计无法瞬间击杀对方，也只有将人拦截在远处。\n[旁白]:对方并没有全力飞遁的样子，速度并不算快，所以片刻后，韩立就在小岛的外围迎上了对方。\n[旁白]:早在开始护法时韩立就将相貌变幻了下，因此倒也不怕对方认出自己这个虚天鼎的拥有者。相反相隔百余丈，韩立冷眼望着一男一女，脸上面无表情。\n[旁白]:略一打量之后，韩立目中闪过一丝讶色。\n[旁白]:那男的也就罢了，虽然眉宇间的金芒有些惹眼，但顶多是修炼的功法有些特殊而致。女的则姿色太过惊人甚至让人兴起一种不敢亵渎的念头，让韩立不禁多瞅了两眼。\n[旁白]:结果不知为何，韩立蓦然对此女升起一种熟悉的感觉，特别是那双清澈的眼眸，似乎在哪里见到过一样。\n[旁白]:不过韩立确信，他的确第一次见到这绝色少女。否则对此女的过人姿色，不可能不留下深刻的印象。\n[旁白]:此刻对面的男子和绝色少女同样看了看韩立。\n[温天仁]:不知道道友贵姓，在那里施展逆天秘术的是阁下的同伴吗？\n[旁白]:温天仁双手倒背，脸上闪过一丝异色后，微微一笑的开口了。\n[旁白]:韩立闻言，心中又是一凛！对方这么自信的肯定天兆根源，看来男子的厉害犹在他的想象之外啊！\n[韩立]:在下姓什么并不重要，倒是在下奉劝道友，就此回头吧！既然知道此天象并非宝物现世的迹象，二位又何必来此岛上？\n[旁白]:韩立不露声色的说道。\n[旁白]:男子一听这话，脸色一沉，眼中闪过一丝冷意。\n[温天仁]:我来此并非为什么天兆，而是为道友而来！\n[旁白]:他淡淡的说道。\n[韩立]:为我？\n[旁白]:韩立眉头一皱，这话似乎有些出乎意料。\n[温天仁]:不错！既然阁下不愿意告诉姓名，我也不强求。不过各个门派中有名有姓的结丹修士，温某都略知一二。而道友的相貌却陌生的很，看来阁下应该是一名散修了。既然这样，温某给你和谷中的同伴两个选择，一加入本盟，做我神鸠堂的执法使，从此听命于我；二是让温某出手，就在这里让你陨落。\n[旁白]:温天明儒雅的面容透出了几分煞气，冷冰冰的说道。\n[韩立]:听你的命令？本盟？你是逆星盟的人？\n[旁白]:韩立一听这话，先是愣了一下，但随后疑惑的重新打量了男子一眼。\n[绝色少女]:温公子是逆星盟六道极圣前辈的高徒，道友就此归顺的话，并不算辱没了身份。而且以道友的修为，肯定会在盟中得到重用的。\n[旁白]:一旁的绝色少女，不冷不热的忽然开口道，并点出了男子的身份。\n[旁白]:六道传人？韩立神色有些动容。他虽然知道男子的来历肯定不一般，但也没想到如此的吓人。\n[旁白]:那温天仁看到韩立脸上的惊色，虽然神情不变，但眼中露出一丝傲然之意。他喜欢看到陌生修士听到自己身份后的诚惶诚恐的表情，并不觉得借助六道传人的身份有何不可，毕竟身份也是个人实力的一部分。\n[旁白]:可是温天仁的愉快心情只维持了片刻，因为韩立的神情，很快就换上了冷笑之色。\n[韩立]:原来是逆星盟的少主到了，在下真是失敬！不过在下并没有加入贵盟的意思，也不想就此身死。相反，在下另有一个提议，不如温少主的性命，交予在下如何？\n[旁白]:韩立用讥讽的口气说道。\n[旁白]:以对方气势汹汹的样子，他很清楚此事无法善了了。而且一开始他就从这位六道传人的神识上感到了丝丝杀气，虽然还不知为何如此，但就是真答应归顺了对方，恐怕这位少主仍会出手杀了他。既然如此韩立也就撕开了面皮，不再给对方什么好脸色了。别人惧怕逆星盟的庞大势力，他可不在乎的。毕竟拥有虚天鼎的他，本身就同时被所有势力通缉的人。\n[温天仁]:好，很好！\n[旁白]:温天仁此刻怒极反笑起来，盯着韩立连吐出几个好字来，眼中寒芒愈盛。可就在最后一个好字刚出口的瞬间，他猛然喷出一道蓝芒出来。\n[旁白]:此蓝芒脱口后，瞬间爆射出刺眼精光，随后“嗖”的一声，不见踪影。\n[旁白]:见到这一幕，韩立脸上阴厉之色一闪，想都不想的单手一挥，手中早扣住的玉如意光华闪动，红黄两色的光罩就出现在了身上。\n[旁白]:下一刻，蓝芒蓦然出现在了韩立身前，激射到了光罩之上，发出了沉闷的声响。\n[旁白]:韩立神色微微一变后，连人带罩的被击飞出去数丈远去。\n[旁白]:这时他才看清，蓝芒竟是一柄数寸大小的奇特尖锥，上面寒光闪闪，符文缠绕，还发出噼噼啪啪的怪异之声。\n[旁白]:韩立不及多想的十指连弹，十道青色剑气同时脱手射出，击到了蓝芒之上，将尖锥一下击飞了出去。\n[旁白]:接着他又毫不迟疑的往储物袋上单手一拍，五枚铜环在一阵清鸣声中出现在了手中，射出五色的霞光。同时韩立衣袖一甩，二十多口飞剑一下狂涌而出，直奔对面奔袭而去。\n[旁白]:见到自己一击未曾奏效的温天仁，并没有露出意外的神色，反而不慌不忙的两手一合，手中多出了一杆小幡出来。此幡长约三四寸，紫光闪闪，灵气逼人。\n[旁白]:这时他又看见了对面飞射而来的众多口飞剑，才终于有些动容的轻“咦”了一声，不再敢怠慢的急忙晃动手中紫幡，无数紫色云雾一下蹿出，将他严严实实的包在了其内，隐藏起了身形。\n[旁白]:对面正想祭出五行环的韩立见此，眼中闪过一丝可惜之色，但随后没有犹豫的将铜环五行合一化为一道巨环，护在了体外。这时他才两手飞快的一掐法诀，冲那飞射过去的青竹蜂去剑施展了“剑影分光术”的神通。\n[旁白]:顿时二十四口青色飞剑，瞬间晃动一下后，一下化为了九十六道青光，铺天盖地的向那紫色云团狂扎而去。\n[旁白]:已经远远后退百余丈的绝色少女，见到这惊人的一幕，不禁花容失色的满脸骇然，但在难置信的神情中，却另闪过一丝说不出的复杂之色。\n[旁白]:青光如同无数的巨蜂围着紫色云团团飞舞，只是片刻的工夫，就将此团洞穿了数百次之多，但是紫云中却无人一般，丝毫反应没有。这么多飞剑从云中穿插而过，全扎在了空处一样。\n[旁白]:韩立见此情景，眉头不禁一皱，脸色更阴厉了几分。虽然知道不可能就这样收拾掉对方，但这位六道传人的难缠程度似乎还远在估计之上。\n[旁白]:想到这里，冲着远处的飞剑狂点两下，顿时众飞剑发出一阵嗡鸣声，在紫云上一个盘旋后，合为两柄数丈长的巨剑，然后以泰山压顶之势猛击而落。\n[旁白]:与此同时，韩立单手往腰间灵兽袋中一拍。"
+      ]
+    },
+    {
+      "id": 51,
+      "type": "SaveAudio",
+      "pos": [
+        3830.681881888919,
+        2321.5348669818836
+      ],
+      "size": [
+        268.0689041350888,
+        112
+      ],
+      "flags": {},
+      "order": 27,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 87
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "SaveAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "audio/ComfyUI"
+      ]
+    },
+    {
+      "id": 28,
+      "type": "JR_Qwen3TTS_Generate",
+      "pos": [
+        -450.2714047390741,
+        2222.7090433328985
+      ],
+      "size": [
+        400,
+        500.00000000000006
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "link": 26
+        },
+        {
+          "name": "ref_voice_data",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            25,
+            29
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Generate",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "custom_voice",
+        "主人，奴婢十二见过主人",
+        "Auto",
+        true,
+        0.8,
+        1,
+        1.05,
+        1024,
+        true,
+        "",
+        "模拟12岁病娇少女",
+        "Vivian",
+        "Vivian",
+        ""
+      ]
+    },
+    {
+      "id": 30,
+      "type": "SaveAudio",
+      "pos": [
+        -34.277236125773484,
+        2224.301753876181
+      ],
+      "size": [
+        270,
+        112
+      ],
+      "flags": {},
+      "order": 26,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 29
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "SaveAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "audio/ComfyUI"
+      ]
+    },
+    {
+      "id": 16,
+      "type": "JR_Qwen3TTS_VoicePreset",
+      "pos": [
+        1075.228449585181,
+        2088.7212363513736
+      ],
+      "size": [
+        400,
+        228
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "shape": 7,
+          "type": "QWEN3_TTS_MODEL",
+          "link": 13
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 91
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ref_voice_data",
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "links": null
+        },
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": [
+            12
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_VoicePreset",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "save_or_update",
+        "GXM",
+        "碧瑶",
+        "",
+        true,
+        ""
+      ]
+    },
+    {
+      "id": 67,
+      "type": "VHS_LoadAudioUpload",
+      "pos": [
+        737.2253754436207,
+        2315.014641306484
+      ],
+      "size": [
+        310.2113772457708,
+        204
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            91
+          ]
+        },
+        {
+          "name": "duration",
+          "type": "FLOAT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-videohelpersuite",
+        "ver": "993082e4f2473bf4acaf06f51e33877a7eb38960",
+        "Node name for S&R": "VHS_LoadAudioUpload"
+      },
+      "widgets_values": {
+        "audio": "碧瑶.MP3",
+        "start_time": 0,
+        "duration": 0,
+        "audiopreview": {
+          "params": {
+            "start_time": 0,
+            "duration": 0,
+            "filename": "碧瑶.MP3",
+            "type": "input"
+          }
+        }
+      }
+    },
+    {
+      "id": 21,
+      "type": "JR_Qwen3TTS_VoicePreset",
+      "pos": [
+        1517.7207710136533,
+        2313.370968153325
+      ],
+      "size": [
+        311.4107197177477,
+        259.10049201398215
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "shape": 7,
+          "type": "QWEN3_TTS_MODEL",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ref_voice_data",
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "links": [
+            18
+          ]
+        },
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_VoicePreset",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "load",
+        "碧瑶",
+        "",
+        "",
+        false,
+        ""
+      ]
+    },
+    {
+      "id": 11,
+      "type": "SaveAudio",
+      "pos": [
+        2262.955109855105,
+        2201.4277159743056
+      ],
+      "size": [
+        268.0689041350888,
+        112
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 43
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "SaveAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "audio/ComfyUI"
+      ]
+    },
+    {
+      "id": 22,
+      "type": "JR_Qwen3TTS_Generate",
+      "pos": [
+        1846.9609412418008,
+        2094.0343592564936
+      ],
+      "size": [
+        400,
+        500.00000000000006
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "link": 19
+        },
+        {
+          "name": "ref_voice_data",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": 18
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            42
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Generate",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "voice_clone",
+        "你好，欢迎来到永恒神殿,这里是专门为唐佳帝君准备的乐园",
+        "Auto",
+        true,
+        0.9,
+        0.8,
+        1.05,
+        1024,
+        true,
+        "",
+        false,
+        "",
+        "Vivian",
+        ""
+      ]
+    },
+    {
+      "id": 33,
+      "type": "JR_Qwen3TTS_Generate",
+      "pos": [
+        -20.808491734608623,
+        1260.707136897895
+      ],
+      "size": [
+        400,
+        500.00000000000006
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "QWEN3_TTS_MODEL",
+          "link": 32
+        },
+        {
+          "name": "ref_voice_data",
+          "shape": 7,
+          "type": "QWEN3_TTS_VOICE_PROMPT",
+          "link": null
+        },
+        {
+          "name": "ref_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "name": "instruct",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "instruct"
+          },
+          "link": 36
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            31,
+            33
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI_JR_Qwen3TTS",
+        "ver": "79f14f2a0d24d8e665a0b9f1164a701fb2b9f87f",
+        "Node name for S&R": "JR_Qwen3TTS_Generate",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "voice_design",
+        "你好，欢迎来到永恒神殿,这里是专门为唐佳帝君准备的乐园",
+        "Auto",
+        true,
+        0.8,
+        1,
+        1.05,
+        1024,
+        true,
+        "",
+        false,
+        "Vivian",
+        "Vivian",
+        ""
+      ]
+    },
+    {
+      "id": 34,
+      "type": "SaveAudio",
+      "pos": [
+        395.1856768786954,
+        1262.2998474411775
+      ],
+      "size": [
+        270,
+        112
+      ],
+      "flags": {},
+      "order": 33,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 33
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "SaveAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "audio/ComfyUI"
+      ]
+    },
+    {
+      "id": 71,
+      "type": "CR Prompt Text",
+      "pos": [
+        1474.2032189545846,
+        1968.0456487354568
+      ],
+      "size": [
+        727.846504895046,
+        569.1308459607797
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 14,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            94
+          ]
+        },
+        {
+          "name": "show_help",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "title": "LLM系统角色定义",
+      "properties": {
+        "cnr_id": "comfyroll",
+        "ver": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
+        "Node name for S&R": "CR Prompt Text"
+      },
+      "widgets_values": [
+        "# 角色与任务\n你是一个专业的“小说文本转话本格式”处理引擎。你的任务是将提供的**第三人称叙事小说段落**，精准地转换为标准的**“话本”或“剧本”格式**。转换的核心是：识别所有**直接引语**，将其转换为对话行；其余所有叙述、描写、心理活动等，全部归为旁白。\n\n# 核心转换规则\n1.  **对话行**：当文本中出现**直接引语**（即被引导包围、角色亲口说出的话），将其转换为 `[角色名]: 说话内容` 格式。\n    *   **角色名**从上下文中推断（如“韩立说道” -> 角色名就是“韩立”）。\n    *   说话内容前的引导词（如“说道”、“问”、“喝道”）**不**要放入对话行。只保留纯引语内容。\n    *   如果引语前有描述性修饰（如“冷冷地说道”），该修饰信息应体现在之前的旁白中。\n\n2.  **旁白行**：**所有非直接引语的内容**，都属于旁白。包括：\n    *   环境描写、动作描写。\n    *   人物的心理活动、神态（如“他心中一惊”、“眉头微皱”）。\n    *   非直接引语的叙述性说明（如“经过此事，韩立自然知道...”）。\n    *   对话的引导词和伴随状态（如“韩立不露声色的说道”、“他淡淡的说道”）。这些内容应紧接在对话行之前或之后，作为独立的 `[旁白]:` 行存在。\n\n3.  **格式规范**：\n    *   每一行都必须以 `[角色名]: ` 或 `[旁白]: ` 开头。\n    *   角色名和旁白标签统一使用中文方括号 `【】` 或 `[]`。\n    *   对话或旁白内容紧随冒号（中文或英文冒号皆可，但需统一）之后，无需额外空格。\n    *   保持原段落结构，但按“旁白/对话”的逻辑点进行分行。一个完整的叙述或一组连贯的动作可以放在一个旁白行里。\n\n# 输出要求\n*   **严格遵循格式**：输出必须是纯文本，每行一个标签。\n*   **忠于原文**：不添加、删减或改写原文情节和信息，只做格式转换。\n*   **连贯性**：确保旁白和对话在逻辑上衔接顺畅。\n*   **无多余解释**：直接输出转换后的话本内容，不要添加任何如“以下是转换结果”之类的开场白或结束语。\n\n# 思维链示例 (供你参考理解任务，不要输出)\n原文: “韩立眉头一皱，冷冷地说道：‘阁下未免太过狂妄了。’同时暗运法力。”\n转换:\n[旁白]:韩立眉头一皱，冷冷地说道。同时暗运法力。\n[韩立]:阁下未免太过狂妄了。"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 68,
+      "type": "OpenAIAsk",
+      "pos": [
+        1653.1181465339062,
+        1261.147949376369
+      ],
+      "size": [
+        261.862890625,
+        689.2600214397348
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "question",
+          "type": "STRING",
+          "widget": {
+            "name": "question"
+          },
+          "link": 92
+        },
+        {
+          "name": "system_prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "system_prompt"
+          },
+          "link": 94
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "links": [
+            93
+          ]
+        },
+        {
+          "name": "negative",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "answer_text",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "raw_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "aux_id": "Goldlionren/ComfyUI-OpenAI-Ask",
+        "ver": "676345fc989520a7fe3913c0e40543ae254a139a",
+        "Node name for S&R": "OpenAIAsk"
+      },
+      "widgets_values": [
+        "Provide a detailed prompt based on this image. Output exactly two lines:\nPrompt: xxx\nNegative: xxx",
+        "http://127.0.0.1:10000",
+        "/v1/chat/completions",
+        "Qwen3-VL",
+        0.7,
+        1,
+        13000,
+        "# 角色与任务\n你是一个专业的“小说文本转话本格式”处理引擎。你的任务是将提供的**第三人称叙事小说段落**，精准地转换为标准的**“话本”或“剧本”格式**。转换的核心是：识别所有**直接引语**，将其转换为对话行；其余所有叙述、描写、心理活动等，全部归为旁白。\n\n# 核心转换规则\n1.  **对话行**：当文本中出现**直接引语**（即被引导包围、角色亲口说出的话），将其转换为 `[角色名]: 说话内容` 格式。\n    *   **角色名**从上下文中推断（如“韩立说道” -> 角色名就是“韩立”）。\n    *   说话内容前的引导词（如“说道”、“问”、“喝道”）**不**要放入对话行。只保留纯引语内容。\n    *   如果引语前有描述性修饰（如“冷冷地说道”），该修饰信息应体现在之前的旁白中。\n\n2.  **旁白行**：**所有非直接引语的内容**，都属于旁白。包括：\n    *   环境描写、动作描写。\n    *   人物的心理活动、神态（如“他心中一惊”、“眉头微皱”）。\n    *   非直接引语的叙述性说明（如“经过此事，韩立自然知道...”）。\n    *   对话的引导词和伴随状态（如“韩立不露声色的说道”、“他淡淡的说道”）。这些内容应紧接在对话行之前或之后，作为独立的 `[旁白]:` 行存在。\n\n3.  **格式规范**：\n    *   每一行都必须以 `[角色名]: ` 或 `[旁白]: ` 开头。\n    *   角色名和旁白标签统一使用中文方括号 `【】` 或 `[]`。\n    *   对话或旁白内容紧随冒号（中文或英文冒号皆可，但需统一）之后，无需额外空格。\n    *   保持原段落结构，但按“旁白/对话”的逻辑点进行分行。一个完整的叙述或一组连贯的动作可以放在一个旁白行里。\n\n# 输出要求\n*   **严格遵循格式**：输出必须是纯文本，每行一个标签。\n*   **忠于原文**：不添加、删减或改写原文情节和信息，只做格式转换。\n*   **连贯性**：确保旁白和对话在逻辑上衔接顺畅。\n*   **无多余解释**：直接输出转换后的话本内容，不要添加任何如“以下是转换结果”之类的开场白或结束语。\n\n# 思维链示例 (供你参考理解任务，不要输出)\n原文: “韩立眉头一皱，冷冷地说道：‘阁下未免太过狂妄了。’同时暗运法力。”\n转换:\n[旁白]:韩立眉头一皱，冷冷地说道。同时暗运法力。\n[韩立]:阁下未免太过狂妄了。",
+        "auto",
+        "content_only",
+        "",
+        "",
+        "",
+        60,
+        1280,
+        "JPEG",
+        90
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 70,
+      "type": "ShowText|pysssss",
+      "pos": [
+        1927.6168117861523,
+        1261.147949376369
+      ],
+      "size": [
+        1815.6603838571991,
+        703.0939150941665
+      ],
+      "flags": {},
+      "order": 31,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 93
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "title": "生成剧本预览",
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        "[旁白]:经过此事，韩立自然知道后来之人并非普通的修士，也没有心情和那鬼鬼祟祟的白影纠缠什么，马上催动噬金虫所化巨矛轻易击毙了白影。如今他才可以全心应对新到的结丹后期的家伙。\n[旁白]:回看了下谷中的情形。\n[旁白]:韩立看到阵法处已经被一团漆黑如墨的阴气围的水泄不通，估计元瑶的还魂术也到了关键时刻，若被人打扰，恐怕非但妍丽无法救活，就是此女自身也会功法反噬，受伤不轻。\n[旁白]:韩立眉头皱了皱，回过头来沉吟一下。\n[旁白]:虽然不知道青年是何方神圣，但光神识就强大如斯，这就让他不敢小瞧分毫。当然他也没什么惧色，他自信以自己的法宝神通，结丹修士中没人能对他造成威胁。\n[旁白]:他正在思量，要不要主动打发掉此人。毕竟对方看起来还是有些棘手，万一和其他修士联手的话，还是个不小的麻烦。忽然有所感应脸色微变，眼睛一缩的猛然站起身来。\n[旁白]:那男子竟带着身边的绝色少女，离开了兽车，向这里飞遁而来。\n[旁白]:韩立脸色一沉，两手一抬，放出十几只巨猿傀儡在了原地，以防自己不在时被一些宵小钻了空子，自己则毫不迟疑的一跺足，化为一道青虹，迎向那对男女。\n[旁白]:他们这种等级修士若是在附近交锋，很可能波及了谷中释法的元瑶。而对方看起来不弱，估计无法瞬间击杀对方，也只有将人拦截在远处。\n[旁白]:对方并没有全力飞遁的样子，速度并不算快，所以片刻后，韩立就在小岛的外围迎上了对方。\n[旁白]:早在开始护法时韩立就将相貌变幻了下，因此倒也不怕对方认出自己这个虚天鼎的拥有者。相反相隔百余丈，韩立冷眼望着一男一女，脸上面无表情。\n[旁白]:略一打量之后，韩立目中闪过一丝讶色。\n[旁白]:那男的也就罢了，虽然眉宇间的金芒有些惹眼，但顶多是修炼的功法有些特殊而致。女的则姿色太过惊人甚至让人兴起一种不敢亵渎的念头，让韩立不禁多瞅了两眼。\n[旁白]:结果不知为何，韩立蓦然对此女升起一种熟悉的感觉，特别是那双清澈的眼眸，似乎在哪里见到过一样。\n[旁白]:不过韩立确信，他的确第一次见到这绝色少女。否则对此女的过人姿色，不可能不留下深刻的印象。\n[旁白]:此刻对面的男子和绝色少女同样看了看韩立。\n[温天仁]:不知道道友贵姓，在那里施展逆天秘术的是阁下的同伴吗？\n[旁白]:韩立闻言，心中又是一凛！对方这么自信的肯定天兆根源，看来男子的厉害犹在他的想象之外啊！\n[韩立]:在下姓什么并不重要，倒是在下奉劝道友，就此回头吧！既然知道此天象并非宝物现世的迹象，二位又何必来此岛上？\n[旁白]:男子一听这话，脸色一沉，眼中闪过一丝冷意。\n[温天仁]:我来此并非为什么天兆，而是为道友而来！\n[韩立]:为我？\n[旁白]:韩立眉头一皱，这话似乎有些出乎意料。\n[温天仁]:不错！既然阁下不愿意告诉姓名，我也不强求。不过各个门派中有名有姓的结丹修士，温某都略知一二。而道友的相貌却陌生的很，看来阁下应该是一名散修了。既然这样，温某给你和谷中的同伴两个选择，一加入本盟，做我神鸠堂的执法使，从此听命于我；二是让温某出手，就在这里让你陨落。\n[旁白]:一旁的绝色少女，不冷不热的忽然开口道，并点出了男子的身份。\n[韩立]:六道传人？\n[旁白]:韩立神色有些动容。他虽然知道男子的来历肯定不一般，但也没想到如此的吓人。\n[旁白]:那温天仁看到韩立脸上的惊色，虽然神情不变，但眼中露出一丝傲然之意。他喜欢看到陌生修士听到自己身份后的诚惶诚恐的表情，并不觉得借助六道传人的身份有何不可，毕竟身份也是个人实力的一部分。\n[旁白]:可是温天仁的愉快心情只维持了片刻，因为韩立的神情，很快就换上了冷笑之色。\n[韩立]:原来是逆星盟的少主到了，在下真是失敬！不过在下并没有加入贵盟的意思，也不想就此身死。相反，在下另有一个提议，不如温少主的性命，交予在下如何？\n[旁白]:以对方气势汹汹的样子，他很清楚此事无法善了了。而且一开始他就从这位六道传人的神识上感到了丝丝杀气，虽然还不知为何如此，但就是真答应归顺了对方，恐怕这位少主仍会出手杀了他。既然如此韩立也就撕开了面皮，不再给对方什么好脸色了。别人惧怕逆星盟的庞大势力，他可不在乎的。毕竟拥有虚天鼎的他，本身就同时被所有势力通缉的人。\n[温天仁]:好，很好！\n[旁白]:温天仁此刻怒极反笑起来，盯着韩立连吐出几个好字来，眼中寒芒愈盛。可就在最后一个好字刚出口的瞬间，他猛然喷出一道蓝芒出来。\n[旁白]:此蓝芒脱口后，瞬间爆射出刺眼精光，随后“嗖”的一声，不见踪影。\n[旁白]:见到这一幕，韩立脸上阴厉之色一闪，想都不想的单手一挥，手中早扣住的玉如意光华闪动，红黄两色的光罩就出现在了身上。\n[旁白]:下一刻，蓝芒蓦然出现在了韩立身前，激射到了光罩之上，发出了沉闷的声响。\n[旁白]:韩立神色微微一变后，连人带罩的被击飞出去数丈远去。\n[旁白]:这时他才看清，蓝芒竟是一柄数寸大小的奇特尖锥，上面寒光闪闪，符文缠绕，还发出噼噼啪啪的怪异之声。\n[旁白]:韩立不及多想的十指连弹，十道青色剑气同时脱手射出，击到了蓝芒之上，将尖锥一下击飞了出去。\n[旁白]:接着他又毫不迟疑的往储物袋上单手一拍，五枚铜环在一阵清鸣声中出现在了手中，射出五色的霞光。同时韩立衣袖一甩，二十多口飞剑一下狂涌而出，直奔对面奔袭而去。\n[旁白]:见到自己一击未曾奏效的温天仁，并没有露出意外的神色，反而不慌不忙的两手一合，手中多出了一杆小幡出来。此幡长约三四寸，紫光闪闪，灵气逼人。\n[旁白]:这时他又看见了对面飞射而来的众多口飞剑，才终于有些动容的轻“咦”了一声，不再敢怠慢的急忙晃动手中紫幡，无数紫色云雾一下蹿出，将他严严实实的包在了其内，隐藏起了身形。\n[旁白]:对面正想祭出五行环的韩立见此，眼中闪过一丝可惜之色，但随后没有犹豫的将铜环五行合一化为一道巨环，护在了体外。这时他才两手飞快的一掐法诀，冲那飞射过去的青竹蜂去剑施展了“剑影分光术”的神通。\n[旁白]:顿时二十四口青色飞剑，瞬间晃动一下后，一下化为了九十六道青光，铺天盖地的向那紫色云团狂扎而去。\n[旁白]:已经远远后退百余丈的绝色少女，见到这惊人的一幕，不禁花容失色的满脸骇然，但在难置信的神情中，却另闪过一丝说不出的复杂之色。\n[旁白]:青光如同无数的巨蜂围着紫色云团团飞舞，只是片刻的工夫，就将此团洞穿了数百次之多，但是紫云中却无人一般，丝毫反应没有。这么多飞剑从云中穿插而过，全扎在了空处一样。\n[旁白]:韩立见此情景，眉头不禁一皱，脸色更阴厉了几分。虽然知道不可能就这样收拾掉对方，但这位六道传人的难缠程度似乎还远在估计之上。\n[旁白]:想到这里，冲着远处的飞剑狂点两下，顿时众飞剑发出一阵嗡鸣声，在紫云上一个盘旋后，合为两柄数丈长的巨剑，然后以泰山压顶之势猛击而落。\n[旁白]:与此同时，韩立单手往腰间灵兽袋中一拍。"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 69,
+      "type": "CR Prompt Text",
+      "pos": [
+        729.4402857257302,
+        1261.147949376369
+      ],
+      "size": [
+        907.4747721354124,
+        662.2223208648952
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            92
+          ]
+        },
+        {
+          "name": "show_help",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "title": "小说文本",
+      "properties": {
+        "cnr_id": "comfyroll",
+        "ver": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
+        "Node name for S&R": "CR Prompt Text"
+      },
+      "widgets_values": [
+        "第五百七十一章 六道传人\n经过此事，韩立自然知道后来之人并非普通的修士，也没有心情和那鬼鬼祟祟的白影纠缠什么，马上催动噬金虫所化巨矛轻易击毙了白影。如今他才可以全心应对新到的结丹后期的家伙。\n回看了下谷中的情形。\n韩立看到阵法处已经被一团漆黑如墨的阴气围的水泄不通，估计元瑶的还魂术也到了关键时刻，若被人打扰，恐怕非但妍丽无法救活，就是此女自身也会功法反噬，受伤不轻。\n韩立眉头皱了皱，回过头来沉吟一下。\n虽然不知道青年是何方神圣，但光神识就强大如斯，这就让他不敢小瞧分毫。当然他也没什么惧色，他自信以自己的法宝神通，结丹修士中没人能对他造成威胁。\n他正在思量，要不要主动打发掉此人。毕竟对方看起来还是有些棘手，万一和其他修士联手的话，还是个不小的麻烦。忽然有所感应脸色微变，眼睛一缩的猛然站起身来。\n那男子竟带着身边的绝色少女，离开了兽车，向这里飞遁而来。\n韩立脸色一沉，两手一抬，放出十几只巨猿傀儡在了原地，以防自己不在时被一些宵小钻了空子，自己则毫不迟疑的一跺足，化为一道青虹，迎向那对男女。\n他们这种等级修士若是在附近交锋，很可能波及了谷中释法的元瑶。而对方看起来不弱，估计无法瞬间击杀对方，也只有将人拦截在远处。\n对方并没有全力飞遁的样子，速度并不算快，所以片刻后，韩立就在小岛的外围迎上了对方。\n早在开始护法时韩立就将相貌变幻了下，因此倒也不怕对方认出自己这个虚天鼎的拥有者。相反相隔百余丈，韩立冷眼望着一男一女，脸上面无表情。\n略一打量之后，韩立目中闪过一丝讶色。\n那男的也就罢了，虽然眉宇间的金芒有些惹眼，但顶多是修炼的功法有些特殊而致。女的则姿色太过惊人甚至让人兴起一种不敢亵渎的念头，让韩立不禁多瞅了两眼。\n结果不知为何，韩立蓦然对此女升起一种熟悉的感觉，特别是那双清澈的眼眸，似乎在哪里见到过一样。\n不过韩立确信，他的确第一次见到这绝色少女。否则对此女的过人姿色，不可能不留下深刻的印象。\n此刻对面的男子和绝色少女同样看了看韩立。\n“不知道道友贵姓，在那里施展逆天秘术的是阁下的同伴吗？”温天仁双手倒背，脸上闪过一丝异色后，微微一笑的开口了。\n韩立闻言，心中又是一凛！对方这么自信的肯定天兆根源，看来男子的厉害犹在他的想象之外啊！\n“在下姓什么并不重要，倒是在下奉劝道友，就此回头吧！既然知道此天象并非宝物现世的迹象，二位又何必来此岛上？”韩立不露声色的说道。\n男子一听这话，脸色一沉，眼中闪过一丝冷意。\n“我来此并非为什么天兆，而是为道友而来！”他淡淡的说道。\n“为我？”韩立眉头一皱，这话似乎有些出乎意料。\n“不错！既然阁下不愿意告诉姓名，我也不强求。不过各个门派中有名有姓的结丹修士，温某都略知一二。而道友的相貌却陌生的很，看来阁下应该是一名散修了。既然这样，温某给你和谷中的同伴两个选择，一加入本盟，做我神鸠堂的执法使，从此听命于我；二是让温某出手，就在这里让你陨落。”温天明儒雅的面容透出了几分煞气，冷冰冰的说道。\n“听你的命令？本盟？你是逆星盟的人？”韩立一听这话，先是愣了一下，但随后疑惑的重新打量了男子一眼。\n“温公子是逆星盟六道极圣前辈的高徒，道友就此归顺的话，并不算辱没了身份。而且以道友的修为，肯定会在盟中得到重用的。”一旁的绝色少女，不冷不热的忽然开口道，并点出了男子的身份。\n“六道传人？”韩立神色有些动容。他虽然知道男子的来历肯定不一般，但也没想到如此的吓人。\n那温天仁看到韩立脸上的惊色，虽然神情不变，但眼中露出一丝傲然之意。他喜欢看到陌生修士听到自己身份后的诚惶诚恐的表情，并不觉得借助六道传人的身份有何不可，毕竟身份也是个人实力的一部分。\n可是温天仁的愉快心情只维持了片刻，因为韩立的神情，很快就换上了冷笑之色。\n“原来是逆星盟的少主到了，在下真是失敬！不过在下并没有加入贵盟的意思，也不想就此身死。相反，在下另有一个提议，不如温少主的性命，交予在下如何？”韩立用讥讽的口气说道。\n以对方气势汹汹的样子，他很清楚此事无法善了了。而且一开始他就从这位六道传人的神识上感到了丝丝杀气，虽然还不知为何如此，但就是真答应归顺了对方，恐怕这位少主仍会出手杀了他。既然如此韩立也就撕开了面皮，不再给对方什么好脸色了。别人惧怕逆星盟的庞大势力，他可不在乎的。毕竟拥有虚天鼎的他，本身就同时被所有势力通缉的人。\n“好，很好！”温天仁此刻怒极反笑起来，盯着韩立连吐出几个好字来，眼中寒芒愈盛。可就在最后一个好字刚出口的瞬间，他猛然喷出一道蓝芒出来。\n此蓝芒脱口后，瞬间爆射出刺眼精光，随后“嗖”的一声，不见踪影。\n见到这一幕，韩立脸上阴厉之色一闪，想都不想的单手一挥，手中早扣住的玉如意光华闪动，红黄两色的光罩就出现在了身上。\n下一刻，蓝芒蓦然出现在了韩立身前，激射到了光罩之上，发出了沉闷的声响。\n韩立神色微微一变后，连人带罩的被击飞出去数丈远去。\n这时他才看清，蓝芒竟是一柄数寸大小的奇特尖锥，上面寒光闪闪，符文缠绕，还发出噼噼啪啪的怪异之声。\n韩立不及多想的十指连弹，十道青色剑气同时脱手射出，击到了蓝芒之上，将尖锥一下击飞了出去。\n接着他又毫不迟疑的往储物袋上单手一拍，五枚铜环在一阵清鸣声中出现在了手中，射出五色的霞光。同时韩立衣袖一甩，二十多口飞剑一下狂涌而出，直奔对面奔袭而去。\n见到自己一击未曾奏效的温天仁，并没有露出意外的神色，反而不慌不忙的两手一合，手中多出了一杆小幡出来。此幡长约三四寸，紫光闪闪，灵气逼人。\n这时他又看见了对面飞射而来的众多口飞剑，才终于有些动容的轻“咦”了一声，不再敢怠慢的急忙晃动手中紫幡，无数紫色云雾一下蹿出，将他严严实实的包在了其内，隐藏起了身形。\n对面正想祭出五行环的韩立见此，眼中闪过一丝可惜之色，但随后没有犹豫的将铜环五行合一化为一道巨环，护在了体外。这时他才两手飞快的一掐法诀，冲那飞射过去的青竹蜂去剑施展了“剑影分光术”的神通。\n顿时二十四口青色飞剑，瞬间晃动一下后，一下化为了九十六道青光，铺天盖地的向那紫色云团狂扎而去。\n已经远远后退百余丈的绝色少女，见到这惊人的一幕，不禁花容失色的满脸骇然，但在难置信的神情中，却另闪过一丝说不出的复杂之色。\n青光如同无数的巨蜂围着紫色云团团飞舞，只是片刻的工夫，就将此团洞穿了数百次之多，但是紫云中却无人一般，丝毫反应没有。这么多飞剑从云中穿插而过，全扎在了空处一样。\n韩立见此情景，眉头不禁一皱，脸色更阴厉了几分。虽然知道不可能就这样收拾掉对方，但这位六道传人的难缠程度似乎还远在估计之上。\n想到这里，冲着远处的飞剑狂点两下，顿时众飞剑发出一阵嗡鸣声，在紫云上一个盘旋后，合为两柄数丈长的巨剑，然后以泰山压顶之势猛击而落。\n与此同时，韩立单手往腰间灵兽袋中一拍。"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 17,
+      "type": "Fast Groups Muter (rgthree)",
+      "pos": [
+        305.7099954073573,
+        2212.9457796107713
+      ],
+      "size": [
+        368.81538036771224,
+        202
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "OPT_CONNECTION",
+          "type": "*",
+          "links": []
+        }
+      ],
+      "title": "流程步骤控制器",
+      "properties": {
+        "matchColors": "",
+        "matchTitle": "",
+        "showNav": true,
+        "showAllGraphs": true,
+        "sort": "position",
+        "customSortAlphabet": "",
+        "toggleRestriction": "default",
+        "widget_ue_connectable": {}
+      },
+      "color": "#322",
+      "bgcolor": "#533"
+    }
+  ],
+  "links": [
+    [
+      12,
+      16,
+      1,
+      13,
+      0,
+      "STRING"
+    ],
+    [
+      13,
+      14,
+      0,
+      16,
+      0,
+      "QWEN3_TTS_MODEL"
+    ],
+    [
+      18,
+      21,
+      0,
+      22,
+      1,
+      "QWEN3_TTS_VOICE_PROMPT"
+    ],
+    [
+      19,
+      19,
+      0,
+      22,
+      0,
+      "QWEN3_TTS_MODEL"
+    ],
+    [
+      21,
+      5,
+      0,
+      23,
+      0,
+      "STRING"
+    ],
+    [
+      24,
+      27,
+      0,
+      25,
+      0,
+      "STRING"
+    ],
+    [
+      25,
+      28,
+      0,
+      27,
+      0,
+      "AUDIO"
+    ],
+    [
+      26,
+      26,
+      0,
+      28,
+      0,
+      "QWEN3_TTS_MODEL"
+    ],
+    [
+      29,
+      28,
+      0,
+      30,
+      0,
+      "AUDIO"
+    ],
+    [
+      30,
+      32,
+      0,
+      31,
+      0,
+      "STRING"
+    ],
+    [
+      31,
+      33,
+      0,
+      32,
+      0,
+      "AUDIO"
+    ],
+    [
+      32,
+      35,
+      0,
+      33,
+      0,
+      "QWEN3_TTS_MODEL"
+    ],
+    [
+      33,
+      33,
+      0,
+      34,
+      0,
+      "AUDIO"
+    ],
+    [
+      34,
+      37,
+      0,
+      36,
+      2,
+      "STRING"
+    ],
+    [
+      35,
+      39,
+      0,
+      36,
+      1,
+      "STRING"
+    ],
+    [
+      36,
+      36,
+      2,
+      33,
+      3,
+      "STRING"
+    ],
+    [
+      37,
+      36,
+      2,
+      40,
+      0,
+      "STRING"
+    ],
+    [
+      42,
+      22,
+      0,
+      44,
+      0,
+      "AUDIO"
+    ],
+    [
+      43,
+      44,
+      0,
+      11,
+      0,
+      "AUDIO"
+    ],
+    [
+      44,
+      44,
+      0,
+      5,
+      0,
+      "AUDIO"
+    ],
+    [
+      48,
+      52,
+      0,
+      53,
+      0,
+      "STRING"
+    ],
+    [
+      80,
+      49,
+      0,
+      62,
+      0,
+      "QWEN3_TTS_MODEL"
+    ],
+    [
+      81,
+      48,
+      0,
+      62,
+      1,
+      "QWEN3_TTS_VOICE_PROMPT"
+    ],
+    [
+      83,
+      47,
+      0,
+      62,
+      2,
+      "QWEN3_TTS_VOICE_PROMPT"
+    ],
+    [
+      84,
+      46,
+      0,
+      62,
+      3,
+      "QWEN3_TTS_VOICE_PROMPT"
+    ],
+    [
+      85,
+      56,
+      0,
+      62,
+      4,
+      "QWEN3_TTS_VOICE_PROMPT"
+    ],
+    [
+      86,
+      50,
+      0,
+      62,
+      11,
+      "STRING"
+    ],
+    [
+      87,
+      62,
+      0,
+      51,
+      0,
+      "AUDIO"
+    ],
+    [
+      88,
+      62,
+      0,
+      52,
+      0,
+      "AUDIO"
+    ],
+    [
+      91,
+      67,
+      0,
+      16,
+      1,
+      "AUDIO"
+    ],
+    [
+      92,
+      69,
+      0,
+      68,
+      1,
+      "STRING"
+    ],
+    [
+      93,
+      68,
+      0,
+      70,
+      0,
+      "STRING"
+    ],
+    [
+      94,
+      71,
+      0,
+      68,
+      2,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "Step2: 制作人声存入演员库（演员储备）",
+      "bounding": [
+        721.49338563098,
+        2015.121236351374,
+        763.7350639542013,
+        513.89340495511
+      ],
+      "color": "#88A",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "Step2.1: 生成声音Clone（面试演员） ",
+      "bounding": [
+        1505.1486800613145,
+        2017.3553282957544,
+        1037.8064297937915,
+        565.1161318715518
+      ],
+      "color": "#b06634",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "Step0.1: 测试Demo(适合初学者）",
+      "bounding": [
+        -792.0836659195604,
+        2146.0300123721604,
+        1037.8064297937915,
+        565.1161318715518
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "Step0: Design语音（创造声模素材）",
+      "bounding": [
+        -794.4863367025351,
+        1187.1071368978946,
+        1471.3525499382342,
+        941.6813083376506
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "Step3: 多人语音生成（演员定档，开拍）",
+      "bounding": [
+        2570.619025148851,
+        2020.0370205441834,
+        1542.4310663411597,
+        1328.6459750039467
+      ],
+      "color": "#009dff",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "Step1:小说-剧本转换器 LLM/OpenAI API",
+      "bounding": [
+        719.4402857257302,
+        1187.5479493763692,
+        3033.83690991762,
+        790.4976993590875
+      ],
+      "color": "#b58b2a",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ue_links": [],
+    "links_added_by_ue": [],
+    "ds": {
+      "scale": 0.7247295000000008,
+      "offset": [
+        914.2526982255617,
+        -1078.9709261017429
+      ]
+    },
+    "workspace_info": {
+      "id": "ljtDX5qKORyr7KRd5o6uX",
+      "saveLock": false,
+      "cloudID": null,
+      "coverMediaPath": null
+    },
+    "workflowRendererVersion": "LG",
+    "frontendVersion": "1.39.5",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

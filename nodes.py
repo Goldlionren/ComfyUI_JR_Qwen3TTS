@@ -410,6 +410,11 @@ class JR_Qwen3TTS_Loader:
             dtype=dtype,
             attn_impl=attn_impl,
         )
+        # Attach cache key to enable precise unload later
+        try:
+            setattr(model, "_jr_qwen3tts_cache_key", _key)
+        except Exception:
+            pass
 
         if warmup:
             _try_warmup(model)
@@ -432,6 +437,8 @@ class JR_Qwen3TTS_Generate:
                 "temperature": ("FLOAT", {"default": 0.8, "min": 0.1, "max": 2.0, "step": 0.01}),
                 "repetition_penalty": ("FLOAT", {"default": 1.05, "min": 0.8, "max": 2.0, "step": 0.01}),
                 "max_new_tokens": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 64}),
+                # If True: unload model (and clear caches) after each run to prevent VRAM accumulation
+                "unload_model_after": ("BOOLEAN", {"default": False}),
             },
             "optional": {
                 "ref_voice_data": (QWEN3_TTS_VOICE_PROMPT,),
@@ -466,6 +473,7 @@ class JR_Qwen3TTS_Generate:
         temperature: float,
         repetition_penalty: float,
         max_new_tokens: int,
+        unload_model_after: bool,
         ref_audio: Optional[Dict[str, Any]] = None,
         ref_voice_data: Optional[Any] = None,
         ref_text: str = "",
@@ -474,6 +482,8 @@ class JR_Qwen3TTS_Generate:
         speaker: str = "",
         speaker_override: str = "",
     ):
+        import gc
+
         gen_kwargs = dict(
             do_sample=bool(do_sample),
             top_p=float(top_p),
@@ -483,55 +493,94 @@ class JR_Qwen3TTS_Generate:
         )
 
         lang = language if language else "Auto"
+        wavs = None
+        sr = None
 
-        if mode == "voice_clone":
-            # Preferred path: pre-extracted voice prompt data
-            if ref_voice_data is not None:
-                print("[JR_Qwen3TTS] Using ref_voice_data (voice preset). ref_audio/ref_text/x_vector_only_mode are ignored.")
-                wavs, sr = model.generate_voice_clone(
+        try:
+            if mode == "voice_clone":
+                # Preferred path: pre-extracted voice prompt data
+                if ref_voice_data is not None:
+                    print("[JR_Qwen3TTS] Using ref_voice_data (voice preset). ref_audio/ref_text/x_vector_only_mode are ignored.")
+                    wavs, sr = model.generate_voice_clone(
+                        text=text,
+                        language=lang,
+                        voice_clone_prompt=ref_voice_data,
+                        **gen_kwargs,
+                    )
+                else:
+                    if ref_audio is None:
+                        raise ValueError("mode=voice_clone requires either 'ref_voice_data' or optional input 'ref_audio' (AUDIO).")
+                    wav_np, wav_sr = _audio_to_np(ref_audio)
+                    wavs, sr = model.generate_voice_clone(
+                        text=text,
+                        language=lang,
+                        ref_audio=(wav_np, wav_sr),
+                        ref_text=ref_text if ref_text else None,
+                        x_vector_only_mode=bool(x_vector_only_mode),
+                        **gen_kwargs,
+                    )
+
+            elif mode == "voice_design":
+                wavs, sr = model.generate_voice_design(
                     text=text,
+                    instruct=instruct if instruct else "",
                     language=lang,
-                    voice_clone_prompt=ref_voice_data,
                     **gen_kwargs,
                 )
+
+            elif mode == "custom_voice":
+                spk = (speaker_override or "").strip() or str(speaker).strip()
+                if not spk:
+                    spk = "Vivian"
+                wavs, sr = model.generate_custom_voice(
+                    text=text,
+                    speaker=spk,
+                    language=lang,
+                    instruct=instruct if instruct else None,
+                    **gen_kwargs,
+                )
+
             else:
-                if ref_audio is None:
-                    raise ValueError("mode=voice_clone requires either 'ref_voice_data' or optional input 'ref_audio' (AUDIO).")
-                wav_np, wav_sr = _audio_to_np(ref_audio)
-                wavs, sr = model.generate_voice_clone(
-                    text=text,
-                    language=lang,
-                    ref_audio=(wav_np, wav_sr),
-                    ref_text=ref_text if ref_text else None,
-                    x_vector_only_mode=bool(x_vector_only_mode),
-                    **gen_kwargs,
-                )
+                raise ValueError(f"Unsupported mode: {mode}")
 
-        elif mode == "voice_design":
-            wavs, sr = model.generate_voice_design(
-                text=text,
-                instruct=instruct if instruct else "",
-                language=lang,
-                **gen_kwargs,
-            )
+            out = _np_to_audio(wavs[0], int(sr))
+            return (out,)
 
-        elif mode == "custom_voice":
-            spk = (speaker_override or "").strip() or str(speaker).strip()
-            if not spk:
-                # Should not happen due to dropdown default, but keep safety.
-                spk = "Vivian"
-            wavs, sr = model.generate_custom_voice(
-                text=text,
-                speaker=spk,
-                language=lang,
-                instruct=instruct if instruct else None,
-                **gen_kwargs,
-            )
+        finally:
+            # Always drop intermediate references
+            try:
+                del wavs
+            except Exception:
+                pass
 
-        else:
-            raise ValueError(f"Unsupported mode: {mode}")
+            # Optional: unload model and clear caches after generation
+            if unload_model_after:
+                try:
+                    key = getattr(model, "_jr_qwen3tts_cache_key", None)
+                    if key is not None:
+                        clear_cache(key)
+                    else:
+                        if hasattr(model, "unload") and callable(getattr(model, "unload")):
+                            model.unload()
+                        else:
+                            clear_cache()
+                except Exception as e:
+                    print(f"[JR_Qwen3TTS] unload_model_after failed: {type(e).__name__}: {e}")
 
-        return (_np_to_audio(wavs[0], sr),)
+            # Hard cleanup to mitigate VRAM accumulation/fragmentation
+            try:
+                gc.collect()
+            except Exception:
+                pass
+            try:
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                    try:
+                        torch.cuda.ipc_collect()
+                    except Exception:
+                        pass
+            except Exception:
+                pass
 
 
 class JR_Qwen3TTS_MultiTalkGenerate:
@@ -561,7 +610,7 @@ class JR_Qwen3TTS_MultiTalkGenerate:
                 "cleanup_each_sentence": ("BOOLEAN", {"default": True}),
                 "cleanup_every_n": ("INT", {"default": 1, "min": 1, "max": 50, "step": 1}),
                 "do_cuda_synchronize_before_cleanup": ("BOOLEAN", {"default": False}),
-"merge_output": ("BOOLEAN", {"default": True}),
+                "merge_output": ("BOOLEAN", {"default": True}),
                 "unload_model_after": ("BOOLEAN", {"default": False}),
             },
             "optional": optional,
@@ -736,10 +785,14 @@ class JR_Qwen3TTS_MultiTalkGenerate:
         # Optional: unload model and clear caches after generation
         if unload_model_after:
             try:
-                if hasattr(model, "unload") and callable(getattr(model, "unload")):
-                    model.unload()
+                key = getattr(model, "_jr_qwen3tts_cache_key", None)
+                if key is not None:
+                    clear_cache(key)
                 else:
-                    clear_cache()
+                    if hasattr(model, "unload") and callable(getattr(model, "unload")):
+                        model.unload()
+                    else:
+                        clear_cache()
             except Exception as e:
                 print(f"[JR_Qwen3TTS] [MultiTalk] unload_model_after failed: {type(e).__name__}: {e}")
             try:
